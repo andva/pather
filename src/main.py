@@ -2,12 +2,11 @@
 
 from map import *
 
-W = 6;
-H = 6;
+W = 12;
+H = 12;
 
 def main():
-    print("hej!");
-    _map = Map(W, H, 2);
+    _map = Map(W, H, 3);
     print _map;
     _map.createEnt();
     return
