@@ -1,0 +1,541 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"nu",
+				"num"
+			],
+			[
+				"fbos",
+				"fbosize"
+			],
+			[
+				"fbo",
+				"fbosize"
+			],
+			[
+				"shado",
+				"shadowCoordWdiv"
+			],
+			[
+				"tex",
+				"texSizeY"
+			],
+			[
+				"te",
+				"texSizeX"
+			],
+			[
+				"shadowCor",
+				"shadowCoordWdiv"
+			],
+			[
+				"shadowC",
+				"shadowCoordWdiv"
+			],
+			[
+				"Verte",
+				"VertexOut"
+			],
+			[
+				"vert",
+				"VertexOut"
+			],
+			[
+				"shadow",
+				"shadowMatrix"
+			],
+			[
+				"S",
+				"SCREEN_HEIGHT	(global, instance)"
+			],
+			[
+				"SC",
+				"SCREEN_WIDTH	(global, instance)"
+			],
+			[
+				"SHADER",
+				"SHADER_FILES"
+			],
+			[
+				"obj",
+				"objects"
+			],
+			[
+				"ob",
+				"objects"
+			],
+			[
+				"OFF",
+				"OFF"
+			],
+			[
+				"libraw",
+				"librawlite"
+			],
+			[
+				"ergoemacs",
+				"ergoemacs"
+			],
+			[
+				"Lib",
+				"LibJPEG"
+			],
+			[
+				"Free",
+				"FreeImageToolkit_HEADER_FILES"
+			],
+			[
+				"Fre",
+				"FreeImage_HEADER_FILES"
+			],
+			[
+				"D",
+				"DeprecationManager_HEADER_FILES"
+			],
+			[
+				"inviwo",
+				"inviwo-projects"
+			],
+			[
+				"co",
+				"color2"
+			],
+			[
+				"out",
+				"out_Color"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "src/graph.py",
+			"settings":
+			{
+				"buffer_size": 1171,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/main.py",
+			"settings":
+			{
+				"buffer_size": 234,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/map.py",
+			"settings":
+			{
+				"buffer_size": 6312,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "Packages/Python/Python.sublime-build",
+	"command_palette":
+	{
+		"height": 150.0,
+		"selected_items":
+		[
+			[
+				"glsl",
+				"Set Syntax: OpenGL SL"
+			],
+			[
+				"men",
+				"View: Toggle Menu"
+			],
+			[
+				"open file",
+				"View: Toggle Open Files in Side Bar"
+			],
+			[
+				"menu",
+				"View: Toggle Menu"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"snippet fu",
+				"Snippet: Function"
+			],
+			[
+				"snippet",
+				"Snippet: if __name__ == '__main__'"
+			],
+			[
+				"package ins",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: Disc",
+				"Package Control: Discover Packages"
+			],
+			[
+				"syntax c#",
+				"Set Syntax: C#"
+			],
+			[
+				"pack",
+				"Preferences: Browse Packages"
+			]
+		],
+		"width": 400.0
+	},
+	"console":
+	{
+		"height": 160.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/F/Programmering/shadows/shaders/textureToScreen.vert",
+		"/F/Programmering/shadows/shaders/textureToScreen.frag",
+		"/F/Programmering/shadows/shaders/lightsourcesphere.frag",
+		"/F/Programmering/shadows/shaders/lightsourcesphere.vert",
+		"/F/Programmering/shadows/shaders/pointshader.frag",
+		"/F/Programmering/shadows/shaders/pointshader.gs",
+		"/F/Programmering/shadows/shaders/pointshader.vert",
+		"/F/Programmering/shadows/shaders/regular.vert",
+		"/F/Programmering/shadows/shaders/regular.frag",
+		"/F/Programmering/shadows/shaders/mainshader.vert",
+		"/F/Programmering/shadows/shaders/ssaoBlur.frag",
+		"/F/Programmering/shadows/shaders/ssaoBlur.vert",
+		"/F/Programmering/shadows/shaders/mainshader.frag",
+		"/C/Users/Valter/Dropbox/Private/Dokument/fl.txt",
+		"/F/Programmering/shadows/objects/sphereSmall.obj",
+		"/F/Programmering/tn1008/killitwithfire/source/CMakeLists.txt",
+		"/C/Users/Valter/Desktop/mpc intervju",
+		"/C/Users/Valter/Desktop/redbook/04/Gouraud/gouraud.cpp",
+		"/C/Users/Valter/Desktop/redbook/include/vutils.h",
+		"/C/Users/Valter/Desktop/redbook/04/ch04_shadowmap/ch04_shadowmap.cpp",
+		"/C/Users/Valter/Desktop/redbook/04/ch04_shadowmap/shadowmap_scene.fs.glsl",
+		"/C/Users/Valter/Desktop/redbook/04/ch04_shadowmap/shadowmap_scene.vs.glsl",
+		"/C/Users/Valter/Desktop/redbook/04/ch04_shadowmap/shadowmap_shadow.vs.glsl",
+		"/C/Users/Valter/Desktop/fov/tutorial23/shadow_map_fbo.cpp",
+		"/C/Users/Valter/Desktop/fov/tutorial23/lighting_technique.h",
+		"/C/Users/Valter/Desktop/fov/tutorial23/pipeline.h",
+		"/C/Users/Valter/Desktop/fov/tutorial23/shadow_map_fbo.h",
+		"/C/Users/Valter/Desktop/fov/tutorial23/technique.cpp",
+		"/C/Users/Valter/Desktop/fov/tutorial23/technique.h",
+		"/C/Users/Valter/Desktop/fov/tutorial23/shadow_map_technique.cpp",
+		"/C/Users/Valter/Desktop/fov/tutorial23/shadow_map_technique.h",
+		"/C/Users/Valter/Desktop/fov/tutorial23/tutorial23.cpp",
+		"/C/Users/Valter/Desktop/fov/shadowmap.c",
+		"/F/Programmering/tsbk03/Cpp/VS10_DOF/VS10_DOF/graphics.cpp",
+		"/C/Users/Valter/Desktop/redbook/04/ch04_shadowmap/shadowmap_shadow.fs.glsl",
+		"/C/Users/Valter/Desktop/fov/view.c",
+		"/C/Users/Valter/Desktop/fov/screen.c",
+		"/C/Users/Valter/Desktop/fov/r_main.c",
+		"/F/Programmering/shadows/shaders/pointnormalshader.gs",
+		"/F/Programmering/shadows/shaders/pointnormalshader.frag",
+		"/F/Programmering/Python/tester/main.py",
+		"/C/Users/Valter/Desktop/redbook/include/mat.h",
+		"/C/Users/Valter/Desktop/redbook/include/vmath.h",
+		"/C/Users/Valter/Desktop/redbook/include/vapp.h",
+		"/C/Users/Valter/Desktop/redbook/include/vbm.h",
+		"/C/Users/Valter/Desktop/redbook/include/vec.h",
+		"/C/Users/Valter/Desktop/redbook/include/vermilion.h",
+		"/C/Users/Valter/Desktop/redbook/include/vgl.h",
+		"/C/Users/Valter/Desktop/redbook/include/LoadShaders.h",
+		"/C/Users/Valter/Desktop/redbook/include/CheckError.h",
+		"/F/Programmering/shadows/shaders/fisheye.frag",
+		"/C/Users/Valter/Dropbox/Private/Programmering/Python/test.py",
+		"/F/Programmering/tsbk03/Cpp/VS10_DOF/VS10_DOF/GL_utilities.cpp",
+		"/F/Programmering/tsbk03/Cpp/VS10_DOF/VS10_DOF/GL_utilities.h",
+		"/F/Programmering/tsbk03/Cpp/VS10_DOF/VS10_DOF/loadobj.h",
+		"/F/Programmering/tsbk03/Cpp/VS10_DOF/VS10_DOF/Menu.cpp",
+		"/F/Programmering/shadows/loadobj.h",
+		"/F/Programmering/shadows/loadobj.cpp",
+		"/F/Programmering/tsbk03/Cpp/DepthOfField/loadobj.cpp",
+		"/F/Programmering/tsbk03/Cpp/DepthOfField/GL_utilities.cpp",
+		"/F/Programmering/tsbk03/Cpp/VS10_DOF/VS10_DOF/VectorUtils.h",
+		"/F/Programmering/tsbk03/Cpp/VS10_DOF/VS10_DOF/VectorUtils.cpp",
+		"/C/Users/Valter/Desktop/assimp--3.0.1270-sdk/samples/SimpleTexturedOpenGL/SimpleTexturedOpenGL/src/model_loading.cpp",
+		"/C/thirdparty/vs2012/x64/qt-everywhere-opensource-src-4.8.3/mkspecs/win32-msvc2010/qmake.conf",
+		"/F/Programmering/tsbk03/Cpp/VS10_DOF/VS10_DOF/Camera.cpp",
+		"/F/Programmering/tsbk03/Cpp/DepthOfField/graphics.cpp",
+		"/F/Programmering/tsbk03/Cpp/DepthOfField/main.cpp",
+		"/F/Programmering/tn1008/killitwithfire/source/fire.cpp",
+		"/F/Programmering/shadows/obj_parser.cpp",
+		"/F/Programmering/shadows/objloader.cpp",
+		"/F/Programmering/tn1008/killitwithfire/source/main.cpp",
+		"/F/Programmering/shadows/obj_parser.h",
+		"/F/Programmering/shadows/objloader.h",
+		"/C/thirdparty/vs2012/x64/qt-everywhere-opensource-src-4.8.3/src/3rdparty/webkit/Source/JavaScriptCore/wtf/HashSet.h",
+		"/F/Programmering/tsbk03/Cpp/VS10_DOF/VS10_DOF/objects/cow.obj",
+		"/F/Programmering/shadows/objects/cornell.obj",
+		"/F/Programmering/shadows/objects/sponza.obj",
+		"/F/Programmering/shadows/objects/sibenik.obj",
+		"/F/Programmering/shadows/objects/cow.obj",
+		"/F/Programmering/shadows/build/CornellBox-Original.mtl",
+		"/F/Programmering/shadows/build/CornellBox-Original.obj",
+		"/F/Programmering/shadows/CMakeLists.txt",
+		"/F/Programmering/inviwo/modules/opengl/CMakeLists.txt",
+		"/F/Programmering/shadows/build/cornell.obj",
+		"/F/Programmering/shadows/objects/CornellBox-Original.obj",
+		"/F/Programmering/shadows/build/objects/CornellBox-Original.mtl",
+		"/C/Users/Valter/AppData/Local/Temp/Rar$DR70.072/main.cpp",
+		"/C/Users/Valter/AppData/Local/Temp/Rar$DR54.776/cwc/include/glApplication.h",
+		"/F/Programmering/shadows/objloader.hpp",
+		"/F/Programmering/shadows/string_extra.h",
+		"/F/Programmering/shadows/list.h",
+		"/C/Users/Valter/Desktop/tutorial07.cpp",
+		"/F/Programmering/shadows/objects/CornellBox-Original.mtl",
+		"/C/bin/.ssh/sshkey.ppk",
+		"/C/Users/Valter/.ssh/bitbucket.ppk",
+		"/C/Users/Valter/.ssh/publicsshkey",
+		"/C/Users/Valter/.ssh/config",
+		"/C/Users/Valter/.ssh/sshkey.ppk",
+		"/F/Programmering/shadows/.gitignore",
+		"/F/Programmering/C++/inviwo/modules/base/CMakeLists.txt",
+		"/F/Programmering/C++/inviwo/modules/base/processors/minmaxprocessor.h",
+		"/F/Programmering/C++/inviwo/modules/base/processors/minmaxprocessor.cpp",
+		"/C/bin/.ssh/known_hosts",
+		"/C/Users/Valter/.ssh/known_hosts",
+		"/C/Users/Valter/Dropbox/Private/Programmering/Skola/tncg14/planetarium/imageLoader.h",
+		"/C/Users/Valter/AppData/Local/Temp/Rar$DR16.824/Game of Thrones - 03x04 - And Now His Watch is Ended.EVOLVE.English.C.orig.Addic7ed.com.srt",
+		"/C/Users/Valter/AppData/Local/Temp/Rar$DR02.824/game.of.thrones.and.now.his.(4947792).nfo",
+		"/C/Users/Valter/Dropbox/Private/Programmering/Skola/tncg14/caster/GLSL/textfile.cpp",
+		"/C/Users/Valter/Dropbox/Private/Programmering/Skola/tncg14/caster/GLSL/textfile.h",
+		"/C/Users/Valter/Dropbox/Private/Programmering/Skola/tncg14/caster/main.cpp",
+		"/F/Programmering/inviwo/src/core/CMakeLists.txt",
+		"/F/Programmering/inviwo/modules/base/CMakeLists.txt",
+		"/F/Programmering/C++/inviwo/modules/opengl/CMakeLists.txt",
+		"/F/Programmering/tn1008/killitwithfire/source/imageExporter.cpp",
+		"/F/Programmering/tn1008/killitwithfire/source/imageExporter.h",
+		"/F/Programmering/inviwo/modules/base/processors/minmaxprocessor.cpp",
+		"/F/Programmering/C++/inviwo/modules/opengl/imageExporter.h",
+		"/F/Programmering/C++/inviwo/modules/opengl/imageExporter.cpp",
+		"/F/Programmering/C++/inviwo/modules/opengl/imageSaver.cpp",
+		"/F/Programmering/C++/inviwo/modules/opengl/imageSaver.h",
+		"/F/Programmering/C++/inviwo/modules/opengl/imageloader - Copy.cpp",
+		"/F/Programmering/C++/inviwo/modules/opengl/imageloader - Copy.h",
+		"/F/Programmering/C++/inviwo/CMakeLists.txt",
+		"/F/Programmering/C++/inviwo/modules/CMakeLists.txt",
+		"/F/Programmering/C++/inviwo/modules/modules.cmake",
+		"/F/Programmering/C++/inviwo/modules/moduleregistration.h",
+		"/F/Programmering/C++/inviwo/modules/opencl/CMakeLists.txt",
+		"/F/Programmering/C++/inviwo/modules/opengl/ext/glew/CMakeLists.txt"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"enable",
+			"crosspro",
+			"rz",
+			"reshape",
+			"Model",
+			"with_threads",
+			"find_package",
+			"heje",
+			"d-quote",
+			" ",
+			";;;",
+			"Z_HAVE_UNISTD_H",
+			"file(GLOB_RECURSE LibMNG_HEADER_FILES ./LibMNG/*.h)\n",
+			"out",
+			"output",
+			"FreeImage.h",
+			"freeimage.h",
+			"link_directories",
+			"tmpos",
+			"_viewportSize",
+			"keyFunc"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 2,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "src/graph.py",
+					"settings":
+					{
+						"buffer_size": 1171,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/main.py",
+					"settings":
+					{
+						"buffer_size": 234,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/map.py",
+					"settings":
+					{
+						"buffer_size": 6312,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4665,
+								4665
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1440.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 34.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 186.0
+	},
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": false,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 201.0,
+	"status_bar_visible": true
+}
