@@ -7,8 +7,8 @@ H = 12;
 
 def main():
     _map = Map(W, H, 3);
-    print _map;
     _map.createEnt();
+    print _map;
     return
 
 if __name__ == "__main__":

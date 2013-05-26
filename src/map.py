@@ -2,7 +2,10 @@ from graph import *
 import random
 
 WALL = 0;
-FLOOR = 1
+FLOOR = 1;
+PATH = 2;
+
+TRANSITION_CONSTANT = 6;
 
 class Map:
     def __init__(self, width, height, nclusters):
@@ -30,6 +33,9 @@ class Map:
     def __getitem__(self,i):
         return self.board[self.getoffset(i)];
 
+    def __setitem__(self,i,value):
+        self.board[i] = value;
+
 #Converts board to string
     def __str__(self):
         v = "";
@@ -42,6 +48,8 @@ class Map:
                 v += str('  ')
             if(self[i] == WALL):
                 v += str('O')
+            elif(self[i] == PATH):
+                v += str('E')
             else:
                 v += str('M')
         return v;
@@ -63,8 +71,10 @@ class Map:
         wasLastFloor = False;
        #return empty list if border 
         if ((clusterId < w and dirid == 0) or
-            (clusterId % w != w - 1 and dirid == 1) or
+            (clusterId * self.cwidth % self.width == 0 and dirid == 1) or
             dirid > 1):
+            print "Faulty",
+            print clusterId;
             return edges;
         else:
             #set up offsets
@@ -101,7 +111,6 @@ class Map:
                     edges.append(mapIndex2)
                     # Add to size count
                     edges[sizeId] += 1;
-
                 else:
                     if(wasLastFloor):
                         edges.append(-1);
@@ -110,13 +119,60 @@ class Map:
                         wasLastFloor = False;
             return edges;
 
+
+    def parseEdgeList(self, edgeList):
+        value = edgeList.pop(0);
+        # If list is faulty
+        if value != -1:
+            return;
+        # Get length of current edge
+        size = edgeList.pop(0);
+        edgeNum = size * 2;
+
+        #If empty list
+        if size == 0:
+            return;
+        # Decide if we want one or two entrances
+
+        if size <= TRANSITION_CONSTANT:
+            # Create one entrance in the middle
+            if size % 2 != 0:
+                middle = int(size / 2) * 2;
+            else:
+                middle = int(size);
+
+            edgeId1 = edgeList[middle];
+            edgeId2 = edgeList[middle + 1];
+            self[edgeId1] = PATH;
+            self[edgeId2] = PATH;
+        else:
+            # Create two entrances in each edge
+            pass;
+        for i in range(0, edgeNum):
+            edgeList.pop(0);
+
+        # If edge have more parts
+        v = edgeList[0] if edgeList else -2;
+        if v == -1:
+            self.parseEdgeList(edgeList);
+        else:
+            return;
+
     def createEnt(self):
         for i in range(0, self.clusters * self.clusters):
-            for dirid in range(0, 2):
+            for dirid in range(1, 2):
                 edge = self.findEdge(i, dirid);
+
+                # Edge list not empty
                 if len(edge) > 2:
-                    print " Edges:",
+                    print "id:",
+                    print i,
+                    print "dir:",
+                    print dirid,
+                    print "e:",
                     print edge;
+                    self.parseEdgeList(edge);
+
 
     def convertClusteri2Mapi(self, i, clusterid):
         p = self.convertClusteri2Mapv(i, clusterid);

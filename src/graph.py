@@ -11,6 +11,10 @@ class Position:
     def __len__(self):
         return 2;
 
+class Entrance:
+    def __init__(self, mapId1, mapId2):
+        self.id1 = mapId1;
+        self.id2 = mapId2;
         
 class Node:
     def __init__(self, x, y, id):
