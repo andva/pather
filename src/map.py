@@ -73,8 +73,6 @@ class Map:
         if ((clusterId < w and dirid == 0) or
             (clusterId * self.cwidth % self.width == 0 and dirid == 1) or
             dirid > 1):
-            print "Faulty",
-            print clusterId;
             return edges;
         else:
             #set up offsets
@@ -140,14 +138,22 @@ class Map:
                 middle = int(size / 2) * 2;
             else:
                 middle = int(size);
-
+            # Get id for entrance
             edgeId1 = edgeList[middle];
             edgeId2 = edgeList[middle + 1];
             self[edgeId1] = PATH;
             self[edgeId2] = PATH;
+            p1 = self.convertMapi2Mapv(edgeId1);
+           # n1 = Node(p1.x, p1.y, )
         else:
             # Create two entrances in each edge
-            pass;
+            edgePair1 = Position(edgeList[0], edgeList[1]);
+            edgePair2 = Position(edgeList[edgeNum-1], edgeList[edgeNum-2]);
+            print edgeList;
+            print "Two entrances:",
+            print edgePair1,
+            print edgePair2;
+
         for i in range(0, edgeNum):
             edgeList.pop(0);
 
@@ -160,19 +166,14 @@ class Map:
 
     def createEnt(self):
         for i in range(0, self.clusters * self.clusters):
-            for dirid in range(1, 2):
+            for dirid in range(0, 2):
                 edge = self.findEdge(i, dirid);
 
                 # Edge list not empty
                 if len(edge) > 2:
-                    print "id:",
-                    print i,
-                    print "dir:",
-                    print dirid,
-                    print "e:",
-                    print edge;
                     self.parseEdgeList(edge);
 
+   # def mapP2
 
     def convertClusteri2Mapi(self, i, clusterid):
         p = self.convertClusteri2Mapv(i, clusterid);

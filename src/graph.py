@@ -17,9 +17,9 @@ class Entrance:
         self.id2 = mapId2;
         
 class Node:
-    def __init__(self, x, y, id):
+    def __init__(self, x, y, clusterid):
         self.position = Position(x, y);
-        self.id = id;
+        self.clusterid = clusterid;
 
 class Edge:
     def __init__(self, i1, i2, cost):
