@@ -149,7 +149,10 @@ class Map:
             # Create two entrances in each edge
             edgePair1 = Position(edgeList[0], edgeList[1]);
             edgePair2 = Position(edgeList[edgeNum-1], edgeList[edgeNum-2]);
-
+            self[edgePair1.x] = PATH;
+            self[edgePair1.y] = PATH;
+            self[edgePair2.x] = PATH;
+            self[edgePair2.y] = PATH;
         for i in range(0, edgeNum):
             edgeList.pop(0);
 
