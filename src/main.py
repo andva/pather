@@ -1,8 +1,8 @@
 # Implementation of near-optimal hierarchical pathfinding
 
-import os, sys
+# import os, sys
 import pygame
-from pygame.locals import *
+# from pygame.locals import *
 
 from map import *
 
@@ -27,8 +27,10 @@ def drawBoard(_map, screen):
 	# Loop trough all and draw board
 	for i in range(0, _map.width):
 		for j in range(0, _map.height):
-			if _map[[i,j]] == FLOOR or _map[[i,j]] == PATH:
+			if _map[[i,j]] == FLOOR:
 				c = blue  
+			elif _map[[i,j]] == PATH:
+				c = red;
 			else: 
 				c = green;
 			p = [i * widthPerTile, j * heightPerTile, 
@@ -46,6 +48,7 @@ def drawBoard(_map, screen):
 def main():
     _map = Map(W, H, NUM_CLUSTERS_PER_DIM);
     _map.createEnt();
+    print _map;
     pygame.init();
     screen = pygame.display.set_mode((512, 512));
     done = False;

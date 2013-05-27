@@ -71,7 +71,7 @@ class Map:
         wasLastFloor = False;
        #return empty list if border 
         if ((clusterId < w and dirid == 0) or
-            (clusterId * self.cwidth % self.width == 0 and dirid == 1) or
+            ((clusterId * self.cwidth) % self.width == 0 and dirid == 1) or
             dirid > 1):
             return edges;
         else:
@@ -149,10 +149,6 @@ class Map:
             # Create two entrances in each edge
             edgePair1 = Position(edgeList[0], edgeList[1]);
             edgePair2 = Position(edgeList[edgeNum-1], edgeList[edgeNum-2]);
-            print edgeList;
-            print "Two entrances:",
-            print edgePair1,
-            print edgePair2;
 
         for i in range(0, edgeNum):
             edgeList.pop(0);
