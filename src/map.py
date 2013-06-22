@@ -18,9 +18,8 @@ class Map:
         self.clusters = nclusters;
         self.cwidth = int(width / nclusters);
         self.cheight = int(height / nclusters);
-        #self.createEntrances();
-        #self.createEnt();
-
+        
+        
 #Getter for 1D and 2D, used in getitem
     def getoffset(self,i):
         #If i is only one digit
@@ -34,7 +33,7 @@ class Map:
     # Move to graph class
     # UNTESTED!
     def getNodesInCluster(self, clusterId):
-        # clusterNodes[];
+        clusterNodes = [];
         for node in self.graph.nodes:
             if node.clusterId == clusterId:
                 clusterNodes.append(node);
@@ -44,6 +43,8 @@ class Map:
     # specified clusters.
     def Astar(self, start, goal, clusterIds, mode):
         # Only length
+        visited = [];
+
         if mode == 0:
             return 0;
         # Only path
@@ -186,8 +187,8 @@ class Map:
             n1 = self.createNodeFromId(edgeId1);
             n2 = self.createNodeFromId(edgeId2);
             # Add nodes and edges to graph 
-            self.graph.addNode(n1.position);
-            self.graph.addNode(n2.position);
+            self.graph.addNode(n1);
+            self.graph.addNode(n2);
             self.graph.addEdge(n1, n2, 1);
             for i in range(0, edgeNum):
                 #Clear all edges in edgelist
@@ -202,8 +203,8 @@ class Map:
             edgeId.append(edgeList[edgeNum-2]);
             for i in range(0, 4):
                 nodes.append(self.createNodeFromId(edgeId[i]));
-            #   Add node to graph
-            self.graph.addNode(nodes[0].position);
+                #   Add node to graph
+                self.graph.addNode(nodes[i]);
             #Add edges, cost is 1 (they are next to each other)
             self.graph.addEdge(nodes[0], nodes[1], 1);
             self.graph.addEdge(nodes[2], nodes[3], 1);

@@ -1,8 +1,8 @@
 # Implementation of near-optimal hierarchical pathfinding
 
 # import os, sys
-# import pygame
-# from pygame.locals import *
+import pygame
+from pygame.locals import *
 
 from map import *
 
@@ -49,24 +49,24 @@ def main():
     _map = Map(W, H, NUM_CLUSTERS_PER_DIM);
     _map.createEnt();
 
-    print _map;
+    # print _map;
     print _map.graph;
-    # pygame.init();
-    # screen = pygame.display.set_mode((512, 512));
-    # done = False;
-    # clock = pygame.time.Clock()
+    pygame.init();
+    screen = pygame.display.set_mode((512, 512));
+    done = False;
+    clock = pygame.time.Clock()
     
-    # while done == False:
-    # 	for event in pygame.event.get():
-    # 		if event.type == pygame.QUIT:
-    # 			done = True;
-    # 	screen.fill(white);
-    # 	###################
-    # 	drawBoard(_map,screen);
-    # 	###################
-    # 	pygame.display.update()
-    # 	# 
-    # 	clock.tick(30)
+    while done == False:
+    	for event in pygame.event.get():
+    		if event.type == pygame.QUIT:
+    			done = True;
+    	screen.fill(white);
+    	###################
+    	drawBoard(_map,screen);
+    	###################
+    	pygame.display.update()
+    	# 
+    	clock.tick(30)
     return
 
 if __name__ == "__main__":

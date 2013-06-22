@@ -21,6 +21,11 @@ class Node:
         self.position = Position(x, y);
         self.clusterid = clusterid;
 
+    def __init__(self, position, clusterid, cost):
+        self.position = position;
+        self.clusterid = clusterid;
+        self.cost = cost;
+
     def __str__(self):
         return "N:" + str(self.clusterid) + " " + str(self.position);
 
@@ -29,6 +34,13 @@ class Edge:
         self.i1 = i1;
         self.i2 = i2;
         self.cost = cost;
+
+    def __eq__(self, edge):
+
+        if (edge.i1 == self.i1 and edge.i2 == self.i2) or (edge.i2 == self.i1 and edge.i1 == self.i2) :
+            return True;
+        return False;
+
     def __getitem__(self, n):
         if n == 0:
             return self.i1;
@@ -46,7 +58,7 @@ class Graph:
 
     def __str__(self):
         nv = "";
-        # nv += self.nodesAsString();
+        nv += self.nodesAsString();
         nv += self.edgesAsString();
         return nv
 
@@ -62,10 +74,17 @@ class Graph:
             res += str(e) + "\n";
         return res;
 
-    def addNode(self, position):
-        self.nodes.append(position);
+    def addNode(self, node):
+        # Only add if node does not already exists
+        for n in self.nodes:
+            if (n.position == node.position):
+                return;
+        self.nodes.append(node);
 
     def addEdge(self, node1, node2, cost):
+        for e in self.edges:
+            if(Edge(node1, node2, cost) == e):
+                return;
         self.edges.append(Edge(node1, node2, cost));
 
     def clearGraph(self):
