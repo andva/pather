@@ -21,6 +21,9 @@ class Node:
         self.position = Position(x, y);
         self.clusterid = clusterid;
 
+    def __str__(self):
+        return "N:" + str(self.clusterid) + " " + str(self.position);
+
 class Edge:
     def __init__(self, i1, i2, cost):
         self.i1 = i1;
@@ -34,12 +37,30 @@ class Edge:
         else:
             raise Exception("Invalid index!");
     def __str__(self):
-        return "[" + self.i1 + "," + self.i2 + "]";
+        return "[" + str(self.i1) + ", " + str(self.i2) + "]";
 
 class Graph:
     def __init__(self):
         self.nodes = [];
         self.edges = [];
+
+    def __str__(self):
+        nv = "";
+        # nv += self.nodesAsString();
+        nv += self.edgesAsString();
+        return nv
+
+    def nodesAsString(self):
+        nv = ""
+        for n in self.nodes:
+            nv += str(n) + "\n";
+        return nv;
+
+    def edgesAsString(self):
+        res = "";
+        for e in self.edges:
+            res += str(e) + "\n";
+        return res;
 
     def addNode(self, position):
         self.nodes.append(position);
@@ -50,3 +71,6 @@ class Graph:
     def clearGraph(self):
         self.nodes = [];
         del self.edges[:];
+
+    def djikstra(self):
+        pass;

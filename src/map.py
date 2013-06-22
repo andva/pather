@@ -7,6 +7,8 @@ PATH = 2;
 
 TRANSITION_CONSTANT = 6;
 
+ADD_EDGES_TO_MAP = True;
+
 class Map:
     def __init__(self, width, height, nclusters):
         self.width = width;
@@ -29,6 +31,39 @@ class Map:
             raise IndexError
         return i[0] + i[1] * self.width;
 
+    # Move to graph class
+    # UNTESTED!
+    def getNodesInCluster(self, clusterId):
+        # clusterNodes[];
+        for node in self.graph.nodes:
+            if node.clusterId == clusterId:
+                clusterNodes.append(node);
+
+    # UNTESTED
+    # Path between start and goal, only ok to walk in 
+    # specified clusters.
+    def Astar(self, start, goal, clusterIds, mode):
+        # Only length
+        if mode == 0:
+            return 0;
+        # Only path
+        elif mode == 1:
+            return [];
+
+    # UNTESTED!
+    def intraClusterEdges(self, clusterId):
+        # visited[];
+        nodes = getNodesInCluster(clusterId);
+        # All nodes against all other nodes
+        for i in range(0, len(nodes)):
+            startNode = nodes[i];
+            for j in range(i, len(nodes)):
+                goalNode = nodes[j];
+                # Find length between the nodes
+                self.Astar(startNode.position, 
+                    gloalNode.position, [clusterId], 0);
+        
+
 #Return status on board for given i (1D or 2D)
     def __getitem__(self,i):
         return self.board[self.getoffset(i)];
@@ -49,7 +84,7 @@ class Map:
             if(self[i] == WALL):
                 v += str('O')
             elif(self[i] == PATH):
-                v += str('E')
+                v += str(' ')
             else:
                 v += str('M')
         return v;
@@ -57,7 +92,7 @@ class Map:
 #Fill board with random walls
     def createBoard(self):
         self.board = [FLOOR] * self.width * self.height;
-        for x in range(1, self.width * 2):
+        for x in range(1, self.width * 4):
             rid = random.randint(0, self.width * self.height-1);
             self.board[rid] = WALL;
 
@@ -98,8 +133,8 @@ class Map:
                 pairedPos = p + offset;
 
                 # Compare tiles to see if current block-pair is entrance
-                if(self[p.x, p.y] == FLOOR and
-                        self[pairedPos.x, pairedPos.y] == FLOOR):
+                if((self[p.x, p.y] == FLOOR or self[p.x, p.y] == PATH) and
+                        (self[pairedPos.x, pairedPos.y] == FLOOR or self[pairedPos.x, pairedPos.y] == PATH)):
                     # Found opening
                     wasLastFloor = True;
                     # Get indexes and add them to the list
@@ -117,6 +152,12 @@ class Map:
                         wasLastFloor = False;
             return edges;
 
+    def createNodeFromId(self, edgeId):
+	  if ADD_EDGES_TO_MAP:
+		self[edgeId] = PATH;
+	  p = self.convertMapi2Mapv(edgeId);
+	  clusterId = self.convertMapv2ClusterId(p);
+	  return Node(p.x, p.y, clusterId);
 
     def parseEdgeList(self, edgeList):
         value = edgeList.pop(0);
@@ -131,7 +172,7 @@ class Map:
         if size == 0:
             return;
         # Decide if we want one or two entrances
-
+	  # Untested
         if size <= TRANSITION_CONSTANT:
             # Create one entrance in the middle
             if size % 2 != 0:
@@ -141,20 +182,34 @@ class Map:
             # Get id for entrance
             edgeId1 = edgeList[middle];
             edgeId2 = edgeList[middle + 1];
-            self[edgeId1] = PATH;
-            self[edgeId2] = PATH;
-            p1 = self.convertMapi2Mapv(edgeId1);
-           # n1 = Node(p1.x, p1.y, )
+            # Create nodes
+            n1 = self.createNodeFromId(edgeId1);
+            n2 = self.createNodeFromId(edgeId2);
+            # Add nodes and edges to graph 
+            self.graph.addNode(n1.position);
+            self.graph.addNode(n2.position);
+            self.graph.addEdge(n1, n2, 1);
+            for i in range(0, edgeNum):
+                #Clear all edges in edgelist
+                edgeList.pop(0);
         else:
             # Create two entrances in each edge
-            edgePair1 = Position(edgeList[0], edgeList[1]);
-            edgePair2 = Position(edgeList[edgeNum-1], edgeList[edgeNum-2]);
-            self[edgePair1.x] = PATH;
-            self[edgePair1.y] = PATH;
-            self[edgePair2.x] = PATH;
-            self[edgePair2.y] = PATH;
-        for i in range(0, edgeNum):
-            edgeList.pop(0);
+            edgeId = [];
+            nodes = [];
+            edgeId.append(edgeList[0]);
+            edgeId.append(edgeList[1]);
+            edgeId.append(edgeList[edgeNum-1]);
+            edgeId.append(edgeList[edgeNum-2]);
+            for i in range(0, 4):
+                nodes.append(self.createNodeFromId(edgeId[i]));
+            #   Add node to graph
+            self.graph.addNode(nodes[0].position);
+            #Add edges, cost is 1 (they are next to each other)
+            self.graph.addEdge(nodes[0], nodes[1], 1);
+            self.graph.addEdge(nodes[2], nodes[3], 1);
+            for i in range(0, edgeNum):
+                #Clear all edges in edgelist
+                edgeList.pop(0);
 
         # If edge have more parts
         v = edgeList[0] if edgeList else -2;
@@ -163,16 +218,25 @@ class Map:
         else:
             return;
 
+
     def createEnt(self):
         for i in range(0, self.clusters * self.clusters):
             for dirid in range(0, 2):
                 edge = self.findEdge(i, dirid);
-
                 # Edge list not empty
                 if len(edge) > 2:
                     self.parseEdgeList(edge);
-
-   # def mapP2
+    #UNTESTED!
+    def createSubMap(self, ptopleft, pbotright):
+        submap = [];
+        width = (pbotright.x - ptopleft.x);
+        height = (pbotright.y - ptopleft.y);
+        length = width * height;
+        for i in range(0, length):
+		x = ptopleft.x + i % width;
+        y = ptopleft.y + int(i / width);
+        globalId = self.convertMapv2Mapi(Position(x,y));
+        submap.append(self[globalId]);
 
     def convertClusteri2Mapi(self, i, clusterid):
         p = self.convertClusteri2Mapv(i, clusterid);
@@ -190,7 +254,12 @@ class Map:
         x = (clusterid % self.clusters) * self.cwidth + p.x;
         y = int(clusterid / self.clusters) * self.cheight + p.y;
         return self.convertMapv2Mapi(Position(x,y)); 
-        
+	
+    # UNTESTED!
+    def convertMapv2ClusterId(self, p):
+        cx = int(p.x / self.cwidth);
+        cy = int(p.y / self.cheight);
+        return cy * self.clusters + cx;        
 
     def convertClusteri2Mapv(self, i, clusterid):
         y = int(clusterid / self.clusters) * self.cheight;
