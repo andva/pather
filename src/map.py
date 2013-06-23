@@ -274,3 +274,8 @@ class Map:
     def convertClusterv2Mapv(self, p, clusterid):
         dirid = self.convertClusterv2Mapi(p, clusterid)
         return self.convertMapi2Mapv(dirid);
+
+    def isPositionValid(self, p):
+        return ( p.x >= 0 and p.x < self.width and p.y >= 0 and p.y < self.height);
+        
+
