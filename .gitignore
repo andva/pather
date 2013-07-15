@@ -34,4 +34,11 @@ nosetests.xml
 .project
 .pydevproject
 
+<<<<<<< HEAD
+=======
+# Sublime
+.sublime-project
+.sublime-workspace
+
+>>>>>>> 4c2534a4051b3909288cc1a67d7d8647bac7fbb1
 
