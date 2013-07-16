@@ -1,8 +1,6 @@
 # Implementation of near-optimal hierarchical pathfinding
-
-
 # import os, sys
-
+from renderer import Renderer
 from map import *
 
 W = 30;
@@ -11,17 +9,8 @@ SCREEN_WIDTH = 512;
 SCREEN_HEIGHT = 512;
 NUM_CLUSTERS_PER_DIM = 3;
 
-usePygame = False;
+usePygame = True;
 drawClusters = True;
-
-# Some colors
-black = [  0,  0,  0]
-white = [255,255,255]
-blue =  [  0,  0,255]
-green = [  0,255,  0]
-red =   [255,  0,  0]
-
-
 
 def main():
     _map = Map(W, H, NUM_CLUSTERS_PER_DIM);
@@ -30,14 +19,15 @@ def main():
     # print _map;
     print _map.graph;
     if (usePygame):
-        _renderer = Renderer();
+        _renderer = Renderer(SCREEN_WIDTH, SCREEN_HEIGHT);
     done = False;
+
     while done == False:
     	
     	###################
         if (usePygame):
             done = _renderer.handleEvents();
-            _renderer.update(_map);
+            _renderer.update(_map, drawClusters);
         else:
             done = True;
     return
