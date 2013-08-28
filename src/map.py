@@ -18,7 +18,8 @@ class Map:
         self.clusters = nclusters;
         self.cwidth = int(width / nclusters);
         self.cheight = int(height / nclusters);
-        
+        self.createEnt()
+
         
 #Getter for 1D and 2D, used in getitem
     def getoffset(self,i):
@@ -30,15 +31,8 @@ class Map:
             raise IndexError
         return i[0] + i[1] * self.width;
 
-    # Move to graph class
-    # UNTESTED!
-    def getNodesInCluster(self, clusterId):
-        clusterNodes = [];
-        for node in self.graph.nodes:
-            if node.clusterId == clusterId:
-                clusterNodes.append(node);
+    
 
-    # UNTESTED
     # Path between start and goal, only ok to walk in 
     # specified clusters.
     def Astar(self, start, goal, clusterIds, mode):
@@ -51,9 +45,7 @@ class Map:
         elif mode == 1:
             return [];
 
-    # UNTESTED!
     def intraClusterEdges(self, clusterId):
-        # visited[];
         nodes = getNodesInCluster(clusterId);
         # All nodes against all other nodes
         for i in range(0, len(nodes)):
@@ -173,7 +165,6 @@ class Map:
         if size == 0:
             return;
         # Decide if we want one or two entrances
-	  # Untested
         if size <= TRANSITION_CONSTANT:
             # Create one entrance in the middle
             if size % 2 != 0:

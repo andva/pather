@@ -37,7 +37,8 @@ class Edge:
 
     def __eq__(self, edge):
 
-        if (edge.i1 == self.i1 and edge.i2 == self.i2) or (edge.i2 == self.i1 and edge.i1 == self.i2) :
+        if ((edge.i1 == self.i1 and edge.i2 == self.i2) or
+           (edge.i2 == self.i1 and edge.i1 == self.i2)) :
             return True;
         return False;
 
@@ -93,3 +94,9 @@ class Graph:
 
     def djikstra(self):
         pass;
+
+    def getNodesInCluster(self, clusterId):
+        clusterNodes = [];
+        for node in self.nodes:
+            if node.clusterId == clusterId:
+                clusterNodes.append(node);

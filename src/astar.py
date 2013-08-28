@@ -19,6 +19,10 @@ class AStar:
 			# Find minimum active node
 			currentNode = self.findMinimum(self.stack);
 			addNeighbouringNodes(currentNode,  self.stack);
+			self.setVisited(node)
+
+	def setVisited(self, node):
+		self.visitedPositions += node;
 
 	def isVisited(self, node):
 		for n in self.visitedPositions:
