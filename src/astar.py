@@ -1,54 +1,78 @@
+from graph import Node
+from graph import Position
+import sys
+
 class AStar:
 	def __init__(self, gameMap):
 		self.gameMap = gameMap;
 		self.visitedPositions = [];
 		self.stack = [];
-	def findMinimum(self, nodes):
-		n = nodes[0];
-		for i in range(0, nodes.length()):
-			if(nodes[i].cost < n.cost):
-				n = nodes[i];
-		return n;
 
+	def findMinimum(self):
+		n = self.stack[0]
+		minId = 0
+		for i in xrange(0, len(self.stack)):
+			if(self.stack[i].cost < self.stack[minId].cost):
+				minId = i
+		new = self.stack.pop(minId)
+		print("asd" + str(new))
+		return new
 
 	def solveBetweenNodes(self, clusterId, nodeA, goal):
 		self.visitedPositions = [];
-		start = Node(nodeA.position, nodeA.clusterId, 0);
+		cost = self.calculateHeuristic(nodeA.position, goal.position)
+		print("Cost: " + str(cost))
+		start = Node(nodeA.position, nodeA.clusterId, cost);
 		self.stack = [start];
-		while self.stack.length() > 0:
+		while len(self.stack) > 0:
 			# Find minimum active node
-			currentNode = self.findMinimum(self.stack);
-			addNeighbouringNodes(currentNode,  self.stack);
-			self.setVisited(node)
+			currentNode = self.findMinimum()
+			if nodeA.position == goal.position:
+				return
+			self.calculateHeuristic(currentNode.position, goal.position)
+			self.addNeighbouringNodes(currentNode, goal)
+			for n in self.stack:
+				print str(n)
+			self.setVisited(currentNode.position)
 
-	def setVisited(self, node):
-		self.visitedPositions += node;
 
-	def isVisited(self, node):
+			print ("Visited")
+			for n in self.visitedPositions:
+				print str(n)
+			val = raw_input('Hej, ska det vara hel- eller flyttalsdivision (H/F)? ')
+
+
+	def setVisited(self, position):
+		self.visitedPositions.append(position)
+
+	def isVisited(self, position):
 		for n in self.visitedPositions:
-			if(node.position.x == n.x and node.position.y == n.y):
+			if(position.x == n.x and position.y == n.y):
 				return True;
 		return False;
 
-	def addNeighbouringNodes(self, node, nodeList):
+	def addNeighbouringNodes(self, node, goal):
 		pos = node.position;
 		posArr = [Position(pos.x + 1, pos.y),
 		Position(pos.x, pos.y + 1),
 		Position(pos.x - 1, pos.y),
 		Position(pos.x, pos.y - 1)];
 		for p in posArr:
-			if(self.gameMap.isValidPosition(p)):
-				if( not self.isVisited(p)):
-					cid = self.gameMap.convertMapv2ClusterId(p);
-					if(cid == node.clusterId):
-						nodeList.append(Node(p, cid, node.cost))
-
-
+			if (self.gameMap.isPositionValid(p) and not self.isVisited(p)):
+				cid = self.gameMap.convertMapv2ClusterId(p);
+				if(cid == node.clusterId):
+					cost = self.calculateHeuristic(p, goal.position)
+					n = Node(p, cid, cost)
+					print("Cost: " + str(n.cost))
+					self.stack.append(n)
+					for n2 in self.stack:
+						print str(n2)
 	# Manhattan distance between nodes
-	def calculateHeuristic(self, node, goal):
-		x = node.position.x - goal.position.x;
-		y = node.position.y - goal.position.y;
-
+	def calculateHeuristic(self, nodePos, goalPos):
+		print ("Start: " + str(nodePos) + " goal: " + str(goalPos))
+		x = nodePos.x - goalPos.x;
+		y = nodePos.y - goalPos.y;
+		print(str(abs(x) + abs(y)))
 		return abs(x) + abs(y);
 
 

@@ -6,11 +6,11 @@ if usePygame:
 
 from map import *
 
-W = 30;
-H = 30;
+W = 12;
+H = 12;
 SCREEN_WIDTH = 512;
 SCREEN_HEIGHT = 512;
-NUM_CLUSTERS_PER_DIM = 3;
+NUM_CLUSTERS_PER_DIM = 2;
 
 
 drawClusters = True;
@@ -28,8 +28,8 @@ def main():
     	
     	###################
         if (usePygame):
-            done = _renderer.handleEvents();
-            _renderer.update(_map, drawClusters);
+            done = _renderer.handleEvents()
+            _renderer.update(_map, drawClusters)
         else:
             done = True;
     return

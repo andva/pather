@@ -17,17 +17,18 @@ class Entrance:
         self.id2 = mapId2;
         
 class Node:
-    def __init__(self, x, y, clusterid):
-        self.position = Position(x, y);
-        self.clusterid = clusterid;
 
-    def __init__(self, position, clusterid, cost):
+    # def __init__(self, position, clusterId):
+    #     self.position = position
+    #     self.clusterId = clusterId
+
+    def __init__(self, position, clusterId, cost = None):
         self.position = position;
-        self.clusterid = clusterid;
+        self.clusterId = clusterId;
         self.cost = cost;
 
     def __str__(self):
-        return "N:" + str(self.clusterid) + " " + str(self.position);
+        return "N:" + str(self.clusterId) + " " + str(self.position);
 
 class Edge:
     def __init__(self, i1, i2, cost):
@@ -97,6 +98,11 @@ class Graph:
 
     def getNodesInCluster(self, clusterId):
         clusterNodes = [];
+
         for node in self.nodes:
+
             if node.clusterId == clusterId:
-                clusterNodes.append(node);
+                print ("Adding")
+                clusterNodes.append(node)
+        print ("G getNodesInCluster: " + str(len(clusterNodes)))
+        return clusterNodes
