@@ -1,14 +1,10 @@
 import pygame
 from pygame.locals import *
-
+from globalconsts import *
 from map import *
 
 # Some colors
-black = [  0,  0,  0]
-white = [255,255,255]
-blue =  [  0,  0,255]
-green = [  0,255,  0]
-red =   [255,  0,  0]
+
 
 class Renderer:
     def __init__(self, width, height):
@@ -24,31 +20,60 @@ class Renderer:
     			return True;
         return False;
 
-    def update(self, _map, drawClusters):
-        self.screen.fill(white);
-        self.drawBoard(_map, drawClusters);
-        pygame.display.update();
+    def update(self, board, drawClusters):
+        self.screen.fill(WHITE)
+        self.drawBoard(board)
+        if drawClusters:
+            self.drawGrid(board)
+        self.drawGraph(board)
+        pygame.display.update()
 
-    def drawBoard(self, _map, drawClusters):
-        widthPerTile = self.SCREEN_WIDTH / _map.width;
-        heightPerTile = self.SCREEN_HEIGHT / _map.height;
+    def drawBoard(self, board):
+        widthPerTile = self.tileWidth(board)
+        heightPerTile = self.tileHeight(board)
     # Loop trough all and draw board
-        for i in range(0, _map.width):
-            for j in range(0, _map.height):
-                if _map[[i,j]] == FLOOR:
-                    c = blue  
-                elif _map[[i,j]] == PATH:
-                    c = red;
+        for i in range(0, board.width):
+            for j in range(0, board.height):
+                if board[[i,j]] == FLOOR:
+                    c = BLUE  
+                elif board[[i,j]] == PATH:
+                    c = RED;
                 else: 
-                    c = green;
+                    c = GREEN;
                 p = [i * widthPerTile, j * heightPerTile, 
                      (i+1)*widthPerTile,	(j+1)*heightPerTile];
-                pygame.draw.rect(self.screen, c, p, 0);
-        if drawClusters:
-            widthPerCluster = self.SCREEN_WIDTH / _map.clusters;
-            heightPerCluster = self.SCREEN_HEIGHT / _map.clusters;
-            for i in range(0, _map.clusters):
-                for j in range(0, _map.clusters):
-                    p = [i * widthPerCluster, j * heightPerCluster,
-                         (i+1) * widthPerCluster, (j+1)*heightPerCluster];
-                    pygame.draw.rect(self.screen, black, p, 4);
+                pygame.draw.rect(self.screen, c, p, 0)
+
+
+    def drawGrid(self, board):
+        widthPerCluster = self.SCREEN_WIDTH / board.clusters;
+        heightPerCluster = self.SCREEN_HEIGHT / board.clusters;
+        for i in range(0, board.clusters):
+            for j in range(0, board.clusters):
+                p = [i * widthPerCluster, j * heightPerCluster,
+                     (i+1) * widthPerCluster, (j+1)*heightPerCluster];
+                pygame.draw.rect(self.screen, BLACK, p, 4);
+
+    def drawGraph(self, board):
+
+        for edge in board.graph.edges:
+            p = [[],[]]
+            for i in range(0, 2):
+                p[i] = self.calculateCenterOfNode(board, edge[i].position)
+                    
+            pygame.draw.aaline(self.screen, BLACK, p[0], p[1])
+        return
+
+    def tileWidth(self, board):
+        return self.SCREEN_WIDTH / board.width
+
+    def tileHeight(self, board):
+        return self.SCREEN_HEIGHT / board.height
+
+    # Position is position of corner of tile in board coordinates
+    def calculateCenterOfNode(self, board, position):
+        widthPerTile = self.tileWidth(board)
+        heightPerTile = self.tileHeight(board)
+
+        return ([widthPerTile * position.x + widthPerTile / 2.0, 
+                heightPerTile * position.y + heightPerTile / 2.0])
