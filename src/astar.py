@@ -26,16 +26,14 @@ class AStar:
 		while len(self.stack) > 0:
 			# Find minimum active node
 			currentNode = self.findMinimum()
-			print("Current node: " + str(currentNode) + " goal: " + str(goal))
 			if currentNode.position == goal.position:
-				return True
+				return cost
 			self.calculateHeuristic(currentNode.position, goal.position)
 			self.addNeighbouringNodes(currentNode, goal)
 
 			self.setVisited(currentNode.position)
 
-			# val = raw_input('Hej, ska det vara hel- eller flyttalsdivision (H/F)? ')
-		return False
+		return -1
 
 	def setVisited(self, position):
 		self.visitedPositions.append(position)
@@ -53,14 +51,17 @@ class AStar:
 		Position(pos.x - 1, pos.y),
 		Position(pos.x, pos.y - 1)];
 		for p in posArr:
-			if self.gameMap[p.x, p.y] == WALL:
-				self.setVisited(p)
-			if (self.gameMap.isPositionValid(p) and not self.isVisited(p)):
+			if (self.gameMap.isPositionValid(p)):
+				if self.gameMap[p.x, p.y] == WALL:
+					self.setVisited(p)
+			if self.gameMap.isPositionValid(p) and not self.isVisited(p):
 				cid = self.gameMap.convertMapv2ClusterId(p);
 				if(cid == node.clusterId):
 					cost = self.calculateHeuristic(p, goal.position)
 					n = Node(p, cid, cost)
 					self.stack.append(n)
+			else:
+				self.setVisited(p)
 	# Manhattan distance between nodes
 	def calculateHeuristic(self, nodePos, goalPos):
 		x = nodePos.x - goalPos.x;

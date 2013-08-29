@@ -16,8 +16,9 @@ class Map:
         self.clusters = nclusters
         self.cwidth = int(width / nclusters)
         self.cheight = int(height / nclusters)
-        self.createEnt()
-        self.intraClusterEdges(0)
+        self.CreateEntrances()
+        for n in xrange(0, nclusters * nclusters):
+            self.intraClusterEdges(n)
     
     #Return status on board for given i (1D or 2D)
     def __getitem__(self,i):
@@ -64,8 +65,9 @@ class Map:
         # Only length
         starSolver = AStar(self)
         t = starSolver.solveBetweenNodes(clusterIds, start, goal)
-        if t:
+        if t > 0:
             print("Found path between " + str(start) + " and " + str(goal))
+            self.graph.addEdge(start, goal, t)
         if mode == 0:
             return 0
         # Only path
@@ -82,7 +84,6 @@ class Map:
                 # Find length between the nodes
                 self.calculatePath(startNode, 
                         goalNode, [clusterId], 0)
-                print("Done")
         
     #Fill board with random walls
     def createBoard(self):
@@ -209,7 +210,7 @@ class Map:
         else:
             return
 
-    def createEnt(self):
+    def CreateEntrances(self):
         for i in range(0, self.clusters * self.clusters):
             for dirid in range(0, 2):
                 edge = self.findEdge(i, dirid)
@@ -265,4 +266,9 @@ class Map:
         return self.convertMapi2Mapv(dirid)
 
     def isPositionValid(self, p):
+        # print(str(p))
+        # print(str(p.x >= 0) + " x s 0 ")
+        # print(str(p.x < self.width) + " p.x < self.width")
+        # print(str(p.y >= 0) + " p.y >= 0 ")
+        # print(str(p.y < self.height) + " x s 0 ")
         return ( p.x >= 0 and p.x < self.width and p.y >= 0 and p.y < self.height)

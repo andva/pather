@@ -31,9 +31,9 @@ class Node:
 
 class Edge:
     def __init__(self, i1, i2, cost):
-        self.i1 = i1
-        self.i2 = i2
-        self.cost = cost
+        self.i1 = i1 # Node 1
+        self.i2 = i2 # Node 2
+        self.cost = cost # Cost for traveling between nodes
 
     def __eq__(self, edge):
 

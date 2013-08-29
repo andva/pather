@@ -6,11 +6,11 @@ if usePygame:
 
 from map import *
 
-W = 12;
-H = 12;
-SCREEN_WIDTH = 512;
+W = 30
+H = 30
+SCREEN_WIDTH = 480;
 SCREEN_HEIGHT = 512;
-NUM_CLUSTERS_PER_DIM = 2;
+NUM_CLUSTERS_PER_DIM = 5;
 
 
 drawClusters = True;
