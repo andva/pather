@@ -1,7 +1,8 @@
 from graph import Node
 from graph import Position
+from globalconsts import *
 import sys
-
+global FLOOR
 class AStar:
 	def __init__(self, gameMap):
 		self.gameMap = gameMap;
@@ -15,32 +16,26 @@ class AStar:
 			if(self.stack[i].cost < self.stack[minId].cost):
 				minId = i
 		new = self.stack.pop(minId)
-		print("asd" + str(new))
 		return new
 
 	def solveBetweenNodes(self, clusterId, nodeA, goal):
 		self.visitedPositions = [];
 		cost = self.calculateHeuristic(nodeA.position, goal.position)
-		print("Cost: " + str(cost))
 		start = Node(nodeA.position, nodeA.clusterId, cost);
 		self.stack = [start];
 		while len(self.stack) > 0:
 			# Find minimum active node
 			currentNode = self.findMinimum()
-			if nodeA.position == goal.position:
-				return
+			print("Current node: " + str(currentNode) + " goal: " + str(goal))
+			if currentNode.position == goal.position:
+				return True
 			self.calculateHeuristic(currentNode.position, goal.position)
 			self.addNeighbouringNodes(currentNode, goal)
-			for n in self.stack:
-				print str(n)
+
 			self.setVisited(currentNode.position)
 
-
-			print ("Visited")
-			for n in self.visitedPositions:
-				print str(n)
-			val = raw_input('Hej, ska det vara hel- eller flyttalsdivision (H/F)? ')
-
+			# val = raw_input('Hej, ska det vara hel- eller flyttalsdivision (H/F)? ')
+		return False
 
 	def setVisited(self, position):
 		self.visitedPositions.append(position)
@@ -58,21 +53,18 @@ class AStar:
 		Position(pos.x - 1, pos.y),
 		Position(pos.x, pos.y - 1)];
 		for p in posArr:
+			if self.gameMap[p.x, p.y] == WALL:
+				self.setVisited(p)
 			if (self.gameMap.isPositionValid(p) and not self.isVisited(p)):
 				cid = self.gameMap.convertMapv2ClusterId(p);
 				if(cid == node.clusterId):
 					cost = self.calculateHeuristic(p, goal.position)
 					n = Node(p, cid, cost)
-					print("Cost: " + str(n.cost))
 					self.stack.append(n)
-					for n2 in self.stack:
-						print str(n2)
 	# Manhattan distance between nodes
 	def calculateHeuristic(self, nodePos, goalPos):
-		print ("Start: " + str(nodePos) + " goal: " + str(goalPos))
 		x = nodePos.x - goalPos.x;
 		y = nodePos.y - goalPos.y;
-		print(str(abs(x) + abs(y)))
 		return abs(x) + abs(y);
 
 
