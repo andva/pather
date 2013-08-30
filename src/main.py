@@ -3,33 +3,68 @@
 usePygame = True;
 if usePygame:
     from renderer import Renderer
-
+    from inputhandler import *
 from map import *
-
-W = 30
-H = 30
-SCREEN_WIDTH = 480;
+from player import *
+W = 50
+H = 50
+SCREEN_WIDTH = 512;
 SCREEN_HEIGHT = 512;
-NUM_CLUSTERS_PER_DIM = 5;
-
-
-drawClusters = True;
+NUM_CLUSTERS_PER_DIM = 10;
 
 def main():
     _map = Map(W, H, NUM_CLUSTERS_PER_DIM);
 
-    # print _map;
-    # print _map.graph;
+    drawClusters = False
+    drawGraph = False
+    players = []
+    activePlayer = -1
+    
     if (usePygame):
-        _renderer = Renderer(SCREEN_WIDTH, SCREEN_HEIGHT);
-    done = False;
+        _inputHandler = InputHandler(SCREEN_WIDTH, SCREEN_HEIGHT, W, H)
+        _renderer = Renderer(SCREEN_WIDTH, SCREEN_HEIGHT, W)
+    
+    done = False
 
     while done == False:
     	
     	###################
         if (usePygame):
+            updatedPlayer = False
+
             done = _renderer.handleEvents()
-            _renderer.update(_map, drawClusters)
+            
+            if _inputHandler.getKeyPressed(K_c):
+                drawClusters = not drawClusters
+            
+            if _inputHandler.getKeyPressed(K_g):
+                drawGraph = not drawGraph
+
+            if _inputHandler.getMousePressed(LEFT_MOUSE_BUTTON):
+                if activePlayer != -1:
+                    players[activePlayer].position = _inputHandler.getMousePosition()
+                    updatedPlayer = True
+                print("Left mouse")
+            
+            if _inputHandler.getMousePressed(RIGHT_MOUSE_BUTTON):
+                print("Right mouse")
+            
+            if _inputHandler.getMousePressed(LEFT_MOUSE_BUTTON, True):
+                mousePosition = _inputHandler.getMousePosition(_map)
+                cid = 0
+                if (_map.isPositionValid(mousePosition) and
+                    _map[mousePosition.x, mousePosition.y] != WALL):
+                    players.append(Player(mousePosition, cid))
+                    activePlayer = len(players) - 1
+                    print("Added player" + str(activePlayer))
+                else:
+                    print("Cant add player on " + str(mousePosition))
+            if _inputHandler.getMousePressed(RIGHT_MOUSE_BUTTON, True):
+                if activePlayer != -1:
+                    pass
+                print("S right")
+            
+            _renderer.update(_map, players, activePlayer, drawClusters, drawGraph)
         else:
             done = True;
     return
