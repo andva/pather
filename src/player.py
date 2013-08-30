@@ -1,6 +1,7 @@
 class Player:
-	def __init__(self, position, goal = None, name = None):
+	def __init__(self, position, currentCluster, goal = None, name = None):
 		self.position = position
+		self.currentCluster = currentCluster
 		self.goal = goal
 		self.name = name
 

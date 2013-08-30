@@ -3,17 +3,20 @@ from pygame.locals import *
 from globalconsts import *
 from pygame.gfxdraw import aacircle
 from map import *
+from player import *
 
 # Some colors
 
 
+
 class Renderer:
-    def __init__(self, width, height):
+    def __init__(self, width, height, boardwidth):
         pygame.init();
-        self.screen = pygame.display.set_mode((width, height));
-        self.clock = pygame.time.Clock();
-        self.SCREEN_WIDTH = width;
-        self.SCREEN_HEIGHT = height;
+        self.screen = pygame.display.set_mode((width, height))
+        self.clock = pygame.time.Clock()
+        self.SCREEN_WIDTH = width
+        self.SCREEN_HEIGHT = height
+        self.CIRCLE_SIZE = int(10 / 3.0)
 
     def handleEvents(self):
         for event in pygame.event.get():
@@ -21,19 +24,20 @@ class Renderer:
     			return True;
         return False;
 
-    def update(self, board, drawClusters, drawGraph):
+    def update(self, board, players, activePlayer, drawClusters, drawGraph):
         self.screen.fill(WHITE)
         self.drawBoard(board)
         if drawClusters:
             self.drawGrid(board)
         if drawGraph:
             self.drawGraph(board)
+        self.drawPlayers(board, players, activePlayer)
         pygame.display.update()
 
     def drawBoard(self, board):
         widthPerTile = self.tileWidth(board)
         heightPerTile = self.tileHeight(board)
-    # Loop trough all and draw board
+        # Loop trough all and draw board
         for i in range(0, board.width):
             for j in range(0, board.height):
                 if board[[i,j]] == FLOOR or board[[i,j]] == PATH:
@@ -43,7 +47,6 @@ class Renderer:
                 p = [i * widthPerTile, j * heightPerTile, 
                      (i+1)*widthPerTile,	(j+1)*heightPerTile];
                 pygame.draw.rect(self.screen, c, p, 0)
-
 
     def drawGrid(self, board):
         widthPerCluster = float(self.SCREEN_WIDTH) / float(board.clusters)
@@ -55,9 +58,6 @@ class Renderer:
                 pygame.draw.rect(self.screen, CLUSTER_EDGE_COLOR, p, 4);
 
     def drawGraph(self, board):
-        widthPerTile = self.tileWidth(board)
-        heightPerTile = self.tileHeight(board)
-
         for edge in board.graph.edges:
             p = [[],[]]
             for i in range(0, 2):
@@ -70,8 +70,14 @@ class Renderer:
             pygame.gfxdraw.aacircle(self.screen, 
                 int(p[0]), 
                 int(p[1]), 
-                int(widthPerTile / 3.0), NODE_COLOR)
+                self.CIRCLE_SIZE, NODE_COLOR)
         return
+
+    def drawPlayers(self, board, players, activePlayer):
+        for player in players:
+            pos = self.calculateCenterOfNode(board, player.position)
+            pygame.gfxdraw.aacircle(self.screen, int(pos[0]), int(pos[1]), 
+                self.CIRCLE_SIZE, PLAYER_COLOR)
 
     def tileWidth(self, board):
         return float(self.SCREEN_WIDTH) / float(board.width)
