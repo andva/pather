@@ -3,23 +3,21 @@
 usePygame = True;
 if usePygame:
     from renderer import Renderer
-    from inputhandler import InputHandler
+    from inputhandler import *
 from map import *
-
-W = 40
-H = 40
+from player import *
+W = 30
+H = 30
 SCREEN_WIDTH = 512;
 SCREEN_HEIGHT = 512;
 NUM_CLUSTERS_PER_DIM = 5;
 
-
-drawClusters = True;
-
 def main():
     _map = Map(W, H, NUM_CLUSTERS_PER_DIM);
 
-    # print _map;
-    # print _map.graph;
+    drawClusters = False;
+    drawGraph = False;
+
     if (usePygame):
         _inputHandler = InputHandler();
         _renderer = Renderer(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -30,8 +28,14 @@ def main():
     	###################
         if (usePygame):
             done = _renderer.handleEvents()
+            if _inputHandler.getKeyPressed(K_c):
+                drawClusters = not drawClusters
+            if _inputHandler.getKeyPressed(K_g):
+                drawGraph = not drawGraph
 
-            _renderer.update(_map, drawClusters)
+            if _inputHandler.getMousePressed(LEFT_MOUSE_BUTTON):
+                print("Left mouse")
+            _renderer.update(_map, drawClusters, drawGraph)
         else:
             done = True;
     return

@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 from globalconsts import *
+from pygame.gfxdraw import aacircle
 from map import *
 
 # Some colors
@@ -20,12 +21,13 @@ class Renderer:
     			return True;
         return False;
 
-    def update(self, board, drawClusters):
+    def update(self, board, drawClusters, drawGraph):
         self.screen.fill(WHITE)
         self.drawBoard(board)
         if drawClusters:
             self.drawGrid(board)
-        self.drawGraph(board)
+        if drawGraph:
+            self.drawGraph(board)
         pygame.display.update()
 
     def drawBoard(self, board):
@@ -34,12 +36,10 @@ class Renderer:
     # Loop trough all and draw board
         for i in range(0, board.width):
             for j in range(0, board.height):
-                if board[[i,j]] == FLOOR:
-                    c = BLUE  
-                elif board[[i,j]] == PATH:
-                    c = RED;
+                if board[[i,j]] == FLOOR or board[[i,j]] == PATH:
+                    c = FLOOR_COLOR  
                 else: 
-                    c = GREEN;
+                    c = WALL_COLOR;
                 p = [i * widthPerTile, j * heightPerTile, 
                      (i+1)*widthPerTile,	(j+1)*heightPerTile];
                 pygame.draw.rect(self.screen, c, p, 0)
@@ -52,16 +52,25 @@ class Renderer:
             for j in range(0, board.clusters):
                 p = [i * widthPerCluster, j * heightPerCluster,
                      (i+1) * widthPerCluster, (j+1)*heightPerCluster];
-                pygame.draw.rect(self.screen, BLACK, p, 4);
+                pygame.draw.rect(self.screen, CLUSTER_EDGE_COLOR, p, 4);
 
     def drawGraph(self, board):
+        widthPerTile = self.tileWidth(board)
+        heightPerTile = self.tileHeight(board)
 
         for edge in board.graph.edges:
             p = [[],[]]
             for i in range(0, 2):
                 p[i] = self.calculateCenterOfNode(board, edge[i].position)
                     
-            pygame.draw.aaline(self.screen, BLACK, p[0], p[1])
+            pygame.draw.aaline(self.screen, GRAPH_EDGE_COLOR, p[0], p[1])
+
+        for node in board.graph.nodes:  
+            p = self.calculateCenterOfNode(board, node.position)
+            pygame.gfxdraw.aacircle(self.screen, 
+                int(p[0]), 
+                int(p[1]), 
+                int(widthPerTile / 3.0), NODE_COLOR)
         return
 
     def tileWidth(self, board):

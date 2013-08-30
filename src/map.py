@@ -11,11 +11,13 @@ class Map:
     def __init__(self, width, height, nclusters):
         self.width = width
         self.height = height
+        print("Creating board")
         self.createBoard()
+        print("Creating graph")
         self.graph = Graph()
         self.clusters = nclusters
-        self.cwidth = int(width / nclusters)
-        self.cheight = int(height / nclusters)
+        self.cwidth = int(width / float(nclusters))
+        self.cheight = int(height / float(nclusters))
         self.CreateEntrances()
         for n in xrange(0, nclusters * nclusters):
             self.intraClusterEdges(n)
@@ -33,7 +35,7 @@ class Map:
         for i in range(0, self.width * self.height):
             if(i % self.width == 0):
                 v += str('\n')
-                if(int(i / self.width) % self.cheight == 0):
+                if(int(i / float(self.width)) % self.cheight == 0):
                     v += str('\n')
             if(i % self.cwidth == 0):
                 v += str('  ')
@@ -96,7 +98,7 @@ class Map:
     #Fill board with random walls
     def createBoard(self):
         self.board = [FLOOR] * self.width * self.height
-        for x in xrange(1, self.width * 4):
+        for x in xrange(1, int(self.width * self.height / 10.0)):
             rid = random.randint(0, self.width * self.height-1)
             shape = random.uniform(0,1)
             pos = self.convertMapi2Mapv(rid)
@@ -216,7 +218,7 @@ class Map:
         if size <= TRANSITION_CONSTANT:
             # Create one entrance in the middle
             if size % 2 != 0:
-                middle = int(size / 2) * 2
+                middle = int(size / 2.0) * 2
             else:
                 middle = int(size)
             # Get id for entrance
@@ -295,8 +297,8 @@ class Map:
         return self.convertMapv2Mapi(Position(x,y)) 
 	
     def convertMapv2ClusterId(self, p):
-        cx = int(p.x / self.cwidth)
-        cy = int(p.y / self.cheight)
+        cx = int(p.x / float(self.cwidth))
+        cy = int(p.y / float(self.cheight))
         cid = cy * self.clusters + cx
         return cid
 
