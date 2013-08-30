@@ -21,8 +21,8 @@ def main():
     activePlayer = -1
     
     if (usePygame):
-        _inputHandler = InputHandler()
-        _renderer = Renderer(SCREEN_WIDTH, SCREEN_HEIGHT, _map.width)
+        _inputHandler = InputHandler(SCREEN_WIDTH, SCREEN_HEIGHT, W, H)
+        _renderer = Renderer(SCREEN_WIDTH, SCREEN_HEIGHT, W)
     
     done = False
 
@@ -50,12 +50,15 @@ def main():
                 print("Right mouse")
             
             if _inputHandler.getMousePressed(LEFT_MOUSE_BUTTON, True):
-                mousePosition = _inputHandler.getMousePosition()
+                mousePosition = _inputHandler.getMousePosition(_map)
                 cid = 0
-                players.append(Player(mousePosition, cid))
-                activePlayer = len(players) - 1
-                print("Added player" + str(activePlayer))
-            
+                if (_map.isPositionValid(mousePosition) and
+                    _map[mousePosition.x, mousePosition.y] != WALL):
+                    players.append(Player(mousePosition, cid))
+                    activePlayer = len(players) - 1
+                    print("Added player" + str(activePlayer))
+                else:
+                    print("Cant add player on " + str(mousePosition))
             if _inputHandler.getMousePressed(RIGHT_MOUSE_BUTTON, True):
                 if activePlayer != -1:
                     pass
