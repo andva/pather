@@ -25,7 +25,7 @@ class Map:
         return self.board[self.getoffset(i)]
 
     def __setitem__(self,i,value):
-        self.board[i] = value
+        self.setoffset(i, value)
 
     #Converts board to string
     def __str__(self):
@@ -44,7 +44,15 @@ class Map:
             else:
                 v += str('M')
         return v
-
+    # Setter for 1D and 2D
+    def setoffset(self, i, value):
+        if(isinstance(i, (long, int))):
+            self.board[i] = value
+            return
+        
+        if(len(i) > 2):
+            raise IndexError
+        self.board[i[0] + i[1] * self.width] = value
     #Getter for 1D and 2D, used in getitem
     def getoffset(self,i):
         #If i is only one digit
@@ -66,7 +74,7 @@ class Map:
         starSolver = AStar(self)
         t = starSolver.solveBetweenNodes(clusterIds, start, goal)
         if t > 0:
-            print("Found path between " + str(start) + " and " + str(goal))
+            # print("Found path between " + str(start) + " and " + str(goal))
             self.graph.addEdge(start, goal, t)
         if mode == 0:
             return 0
@@ -88,9 +96,49 @@ class Map:
     #Fill board with random walls
     def createBoard(self):
         self.board = [FLOOR] * self.width * self.height
-        for x in range(1, self.width * 4):
+        for x in xrange(1, self.width * 4):
             rid = random.randint(0, self.width * self.height-1)
-            self.board[rid] = WALL
+            shape = random.uniform(0,1)
+            pos = self.convertMapi2Mapv(rid)
+            if shape < 0.05:
+                ###
+                #
+                #
+                for i in xrange(0, 3):
+                    p = [None, None]
+                    p[0] = pos + Position(0, i)
+                    p[1] = pos + Position(i, 0)
+                    for j in xrange(0,2):
+                        if self.isPositionValid(p[j]):
+                            self[p[j].x, p[j].y] = WALL
+            elif shape < 0.2:
+                 #
+                ###
+                if self.isPositionValid(Position(pos.x, pos.y - 1)):
+                    self[pos.x, pos.y - 1] = WALL
+                for j in xrange(0,3):
+                    p = Position(pos.x - 1 + j, pos.y)
+                    if self.isPositionValid(p):
+                        self[p.x, p.y] = WALL
+                    
+            elif shape < 0.35:
+                ##
+                ##
+                for i in xrange(0,3):
+                    for j in xrange(0, 3):
+                        p = Position(pos.x + i, pos.y + j)
+                        if self.isPositionValid(p):
+                            self[p.x, p.y] = WALL
+
+            elif shape < 0.65:
+                ##
+                self[pos.x, pos.y] = WALL
+                if self.isPositionValid(Position(pos.x + 1, pos.y)):
+                    self[pos.x + 1, pos.y] + WALL
+            else:
+                # 
+                self.board[rid] = WALL
+                
  
     def findEdge(self, clusterId, dirid):
         sizeId = 1
@@ -266,9 +314,4 @@ class Map:
         return self.convertMapi2Mapv(dirid)
 
     def isPositionValid(self, p):
-        # print(str(p))
-        # print(str(p.x >= 0) + " x s 0 ")
-        # print(str(p.x < self.width) + " p.x < self.width")
-        # print(str(p.y >= 0) + " p.y >= 0 ")
-        # print(str(p.y < self.height) + " x s 0 ")
         return ( p.x >= 0 and p.x < self.width and p.y >= 0 and p.y < self.height)

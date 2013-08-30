@@ -46,8 +46,8 @@ class Renderer:
 
 
     def drawGrid(self, board):
-        widthPerCluster = self.SCREEN_WIDTH / board.clusters;
-        heightPerCluster = self.SCREEN_HEIGHT / board.clusters;
+        widthPerCluster = float(self.SCREEN_WIDTH) / float(board.clusters)
+        heightPerCluster = float(self.SCREEN_HEIGHT) / float(board.clusters)
         for i in range(0, board.clusters):
             for j in range(0, board.clusters):
                 p = [i * widthPerCluster, j * heightPerCluster,
@@ -65,15 +65,15 @@ class Renderer:
         return
 
     def tileWidth(self, board):
-        return self.SCREEN_WIDTH / board.width
+        return float(self.SCREEN_WIDTH) / float(board.width)
 
     def tileHeight(self, board):
-        return self.SCREEN_HEIGHT / board.height
+        return float(self.SCREEN_HEIGHT) / float(board.height)
 
     # Position is position of corner of tile in board coordinates
     def calculateCenterOfNode(self, board, position):
         widthPerTile = self.tileWidth(board)
         heightPerTile = self.tileHeight(board)
 
-        return ([widthPerTile * position.x + widthPerTile / 2.0, 
-                heightPerTile * position.y + heightPerTile / 2.0])
+        return ([widthPerTile * position.x + float(widthPerTile) / 2.0, 
+                heightPerTile * position.y + float(heightPerTile) / 2.0])
