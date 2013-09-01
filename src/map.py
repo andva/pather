@@ -24,10 +24,10 @@ class Map:
 
     #Return status on board for given i (1D or 2D)
     def __getitem__(self,i):
-        return self.board[self.getoffset(i)]
+        return self.board[self.getOffset(i)]
 
     def __setitem__(self,i,value):
-        self.setoffset(i, value)
+        self.setOffset(i, value)
 
     #Converts board to string
     def __str__(self):
@@ -47,7 +47,7 @@ class Map:
                 v += str('M')
         return v
     # Setter for 1D and 2D
-    def setoffset(self, i, value):
+    def setOffset(self, i, value):
         if isinstance(i, (long, int)):
             self.board[i] = value
             return
@@ -56,7 +56,7 @@ class Map:
             raise IndexError
         self.board[i[0] + i[1] * self.width] = value
     #Getter for 1D and 2D, used in getitem
-    def getoffset(self,i):
+    def getOffset(self,i):
         #If i is only one digit
         if isinstance(i, (long, int)):
             return i
@@ -232,7 +232,7 @@ class Map:
             self.graph.addNode(n2)
             self.graph.addEdge(n1, n2, 1)
             for i in range(0, edgeNum):
-                #Clear all edges in edgelist
+                #Clear all edges in edgeList
                 edgeList.pop(0)
         else:
             # Create two entrances in each edge
@@ -250,7 +250,7 @@ class Map:
             self.graph.addEdge(nodes[0], nodes[1], 1)
             self.graph.addEdge(nodes[2], nodes[3], 1)
             for i in range(0, edgeNum):
-                #Clear all edges in edgelist
+                #Clear all edges in edgeList
                 edgeList.pop(0)
 
         # If edge have more parts
@@ -268,8 +268,8 @@ class Map:
                 if len(edge) > 2:
                     self.parseEdgeList(edge)
 
-    def convertClusteri2Mapi(self, i, clusterid):
-        p = self.convertClusteri2Mapv(i, clusterid)
+    def convertClusteri2Mapi(self, i, clusterId):
+        p = self.convertClusteri2Mapv(i, clusterId)
         return self.convertMapv2Mapi(p) 
 
     def convertMapv2Mapi(self, p):
@@ -280,9 +280,9 @@ class Map:
         y = int(i / self.width)
         return Position(x, y)
 
-    def convertClusterv2Mapi(self, p, clusterid):
-        x = (clusterid % self.clusters) * self.cwidth + p.x
-        y = int(clusterid / self.clusters) * self.cheight + p.y
+    def convertClusterv2Mapi(self, p, clusterId):
+        x = (clusterId % self.clusters) * self.cwidth + p.x
+        y = int(clusterId / self.clusters) * self.cheight + p.y
         return self.convertMapv2Mapi(Position(x,y)) 
 
     def convertMapv2ClusterId(self, p):
@@ -291,18 +291,18 @@ class Map:
         cid = cy * self.clusters + cx
         return cid
 
-    def convertClusteri2Mapv(self, i, clusterid):
-        y = int(clusterid / self.clusters) * self.cheight
-        x = (clusterid % self.clusters) * self.cwidth
+    def convertClusteri2Mapv(self, i, clusterId):
+        y = int(clusterId / self.clusters) * self.cheight
+        x = (clusterId % self.clusters) * self.cwidth
 
         x += i % self.cwidth
         y += int(i / self.cwidth)
 
         return Position(x,y)
 
-    def convertClusterv2Mapv(self, p, clusterid):
-        dirid = self.convertClusterv2Mapi(p, clusterid)
-        return self.convertMapi2Mapv(dirid)
+    def convertClusterv2Mapv(self, p, clusterId):
+        dirId = self.convertClusterv2Mapi(p, clusterId)
+        return self.convertMapi2Mapv(dirId)
 
     def isPositionValid(self, p):
         return  0 <= p.x < self.width and 0 <= p.y < self.height

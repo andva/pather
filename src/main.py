@@ -41,13 +41,17 @@ def main():
                 drawGraph = not drawGraph
 
             if _inputHandler.getMousePressed(LEFT_MOUSE_BUTTON):
-                if activePlayer != -1:
-                    players[activePlayer].position = _inputHandler.getMousePosition(_map)
+                mousePosition = _inputHandler.getMousePosition(_map)
+                if activePlayer != -1 and (_map.isPositionValid(mousePosition) and
+                                                   _map[mousePosition.x, mousePosition.y] != WALL):
+                    players[activePlayer].position = mousePosition
                     updatedPlayer = True
 
             if _inputHandler.getMousePressed(RIGHT_MOUSE_BUTTON):
-                if activePlayer != -1:
-                    players[activePlayer].goal = _inputHandler.getMousePosition(_map)
+                mousePosition = _inputHandler.getMousePosition(_map)
+                if activePlayer != -1 and (_map.isPositionValid(mousePosition) and
+                                                   _map[mousePosition.x, mousePosition.y] != WALL):
+                    players[activePlayer].goal = mousePosition
                     updatedPlayer = True
 
             if _inputHandler.getMousePressed(LEFT_MOUSE_BUTTON, True):

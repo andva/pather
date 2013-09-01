@@ -96,7 +96,7 @@ class Graph:
         self.nodes = []
         del self.edges[:]
 
-    def djikstra(self):
+    def dijkstra(self):
         pass
 
     def getNodesInCluster(self, clusterId):
