@@ -268,17 +268,6 @@ class Map:
                 if len(edge) > 2:
                     self.parseEdgeList(edge)
 
-    # def createSubMap(self, ptopleft, pbotright):
-    #     submap = []
-    #     width = (pbotright.x - ptopleft.x)
-    #     height = (pbotright.y - ptopleft.y)
-    #     length = width * height
-    #     for i in range(0, length):
-    #         x = ptopleft.x + i % width
-    #         y = ptopleft.y + int(i / width)
-    #         globalId = self.convertMapv2Mapi(Position(x,y))
-    #         submap.append(self[globalId])
-
     def convertClusteri2Mapi(self, i, clusterid):
         p = self.convertClusteri2Mapv(i, clusterid)
         return self.convertMapv2Mapi(p) 
