@@ -1,6 +1,6 @@
-# Implementation of near-optimal hierarchical pathfinding
+# Implementation of near-optimal hierarchical pathfinder
 # import os, sys
-usePygame = True;
+usePygame = True
 if usePygame:
     from renderer import Renderer
     from inputhandler import *
@@ -8,47 +8,48 @@ from map import *
 from player import *
 W = 50
 H = 50
-SCREEN_WIDTH = 512;
-SCREEN_HEIGHT = 512;
-NUM_CLUSTERS_PER_DIM = 10;
+SCREEN_WIDTH = 512
+SCREEN_HEIGHT = 512
+NUM_CLUSTERS_PER_DIM = 10
 
 def main():
-    _map = Map(W, H, NUM_CLUSTERS_PER_DIM);
+    _map = Map(W, H, NUM_CLUSTERS_PER_DIM)
 
     drawClusters = False
     drawGraph = False
     players = []
     activePlayer = -1
-    
-    if (usePygame):
+
+    if usePygame:
         _inputHandler = InputHandler(SCREEN_WIDTH, SCREEN_HEIGHT, W, H)
-        _renderer = Renderer(SCREEN_WIDTH, SCREEN_HEIGHT, W)
-    
+        _renderer = Renderer(SCREEN_WIDTH, SCREEN_HEIGHT)
+
     done = False
 
-    while done == False:
-    	
-    	###################
-        if (usePygame):
+    while not done:
+
+        ###################
+        if usePygame:
             updatedPlayer = False
 
             done = _renderer.handleEvents()
-            
+
             if _inputHandler.getKeyPressed(K_c):
                 drawClusters = not drawClusters
-            
+
             if _inputHandler.getKeyPressed(K_g):
                 drawGraph = not drawGraph
 
             if _inputHandler.getMousePressed(LEFT_MOUSE_BUTTON):
                 if activePlayer != -1:
-                    players[activePlayer].position = _inputHandler.getMousePosition()
+                    players[activePlayer].position = _inputHandler.getMousePosition(_map)
                     updatedPlayer = True
-                print("Left mouse")
-            
+
             if _inputHandler.getMousePressed(RIGHT_MOUSE_BUTTON):
-                print("Right mouse")
-            
+                if activePlayer != -1:
+                    players[activePlayer].goal = _inputHandler.getMousePosition(_map)
+                    updatedPlayer = True
+
             if _inputHandler.getMousePressed(LEFT_MOUSE_BUTTON, True):
                 mousePosition = _inputHandler.getMousePosition(_map)
                 cid = 0
@@ -58,15 +59,19 @@ def main():
                     activePlayer = len(players) - 1
                     print("Added player" + str(activePlayer))
                 else:
-                    print("Cant add player on " + str(mousePosition))
+                    print("Cant add player on " + str(mousePosition) + " " +
+                          str(_map.isPositionValid(mousePosition)) + " " + str(_map[mousePosition.x, mousePosition.y] != WALL))
             if _inputHandler.getMousePressed(RIGHT_MOUSE_BUTTON, True):
                 if activePlayer != -1:
                     pass
                 print("S right")
-            
+
+            if updatedPlayer:
+                pass
+
             _renderer.update(_map, players, activePlayer, drawClusters, drawGraph)
         else:
-            done = True;
+            done = True
     return
 
 if __name__ == "__main__":

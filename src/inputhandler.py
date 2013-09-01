@@ -42,7 +42,7 @@ class InputHandler:
 		return self.fixKeys(keys, key, self.isDown)
 
 	def getMousePosition(self, board):
-		plist = pygame.mouse.get_pos();
+		plist = pygame.mouse.get_pos()
 		return self.convertScreenToBoard(Position(plist[0], plist[1]), board)
 
 	def fixKeys(self, keys, key, array, extraCheck = True):

@@ -3,9 +3,9 @@ import random
 from astar import AStar
 from globalconsts import *
 
-TRANSITION_CONSTANT = 6;
+TRANSITION_CONSTANT = 6
 
-ADD_EDGES_TO_MAP = True;
+ADD_EDGES_TO_MAP = True
 
 class Map:
     def __init__(self, width, height, nclusters):
@@ -21,7 +21,7 @@ class Map:
         self.CreateEntrances()
         for n in xrange(0, nclusters * nclusters):
             self.intraClusterEdges(n)
-    
+
     #Return status on board for given i (1D or 2D)
     def __getitem__(self,i):
         return self.board[self.getoffset(i)]
@@ -33,38 +33,38 @@ class Map:
     def __str__(self):
         v = ""
         for i in range(0, self.width * self.height):
-            if(i % self.width == 0):
+            if i % self.width == 0:
                 v += str('\n')
-                if(int(i / float(self.width)) % self.cheight == 0):
+                if int(i / float(self.width)) % self.cheight == 0:
                     v += str('\n')
-            if(i % self.cwidth == 0):
+            if i % self.cwidth == 0:
                 v += str('  ')
-            if(self[i] == WALL):
+            if self[i] == WALL:
                 v += str('O')
-            elif(self[i] == PATH):
+            elif self[i] == PATH:
                 v += str(' ')
             else:
                 v += str('M')
         return v
     # Setter for 1D and 2D
     def setoffset(self, i, value):
-        if(isinstance(i, (long, int))):
+        if isinstance(i, (long, int)):
             self.board[i] = value
             return
-        
-        if(len(i) > 2):
+
+        if len(i) > 2:
             raise IndexError
         self.board[i[0] + i[1] * self.width] = value
     #Getter for 1D and 2D, used in getitem
     def getoffset(self,i):
         #If i is only one digit
-        if(isinstance(i, (long, int))):
+        if isinstance(i, (long, int)):
             return i
         #if i is Position
         # if(isinstance(i, Position)):
         #     return i.x + i.y * self.width
         #if i is 2D
-        if(len(i) > 2):
+        if len(i) > 2:
             raise IndexError
         return i[0] + i[1] * self.width
 
@@ -94,7 +94,7 @@ class Map:
                 # Find length between the nodes
                 self.calculatePath(startNode, 
                         goalNode, [clusterId], 0)
-        
+
     #Fill board with random walls
     def createBoard(self):
         self.board = [FLOOR] * self.width * self.height
@@ -122,7 +122,7 @@ class Map:
                     p = Position(pos.x - 1 + j, pos.y)
                     if self.isPositionValid(p):
                         self[p.x, p.y] = WALL
-                    
+
             elif shape < 0.35:
                 ##
                 ##
@@ -136,12 +136,12 @@ class Map:
                 ##
                 self[pos.x, pos.y] = WALL
                 if self.isPositionValid(Position(pos.x + 1, pos.y)):
-                    self[pos.x + 1, pos.y] + WALL
+                    self[pos.x + 1, pos.y] = WALL
             else:
                 # 
                 self.board[rid] = WALL
-                
- 
+
+
     def findEdge(self, clusterId, dirid):
         sizeId = 1
         w =  self.clusters
@@ -154,21 +154,21 @@ class Map:
             return edges
         else:
             #set up offsets
-            if(dirid == 0):
+            if dirid == 0:
                 clusterLength = self.cwidth
                 offset = Position(0, -1)
                 poffset = Position(1, 0)
-                sp = Position(0,0)
 
-            elif(dirid == 1):
+
+            else: # dirid == 1:
                 clusterLength = self.cheight
                 offset = Position(-1, 0)
                 poffset = Position(0, 1)
-                sp = Position(0,0)
-            
+            sp = Position(0,0)
+
             # Find world self position
             worldPosition = self.convertClusterv2Mapv(sp, clusterId)
-            
+
             #Loop trough border of cluster.
             for j in range(0, clusterLength):
                 #Get position in world of current brick
@@ -188,7 +188,7 @@ class Map:
                     # Add to size count
                     edges[sizeId] += 1
                 else:
-                    if(wasLastFloor):
+                    if wasLastFloor:
                         edges.append(-1)
                         edges.append(0)
                         sizeId = len(edges) - 1
@@ -268,21 +268,21 @@ class Map:
                 if len(edge) > 2:
                     self.parseEdgeList(edge)
 
-    def createSubMap(self, ptopleft, pbotright):
-        submap = []
-        width = (pbotright.x - ptopleft.x)
-        height = (pbotright.y - ptopleft.y)
-        length = width * height
-        for i in range(0, length):
-		x = ptopleft.x + i % width
-        y = ptopleft.y + int(i / width)
-        globalId = self.convertMapv2Mapi(Position(x,y))
-        submap.append(self[globalId])
+    # def createSubMap(self, ptopleft, pbotright):
+    #     submap = []
+    #     width = (pbotright.x - ptopleft.x)
+    #     height = (pbotright.y - ptopleft.y)
+    #     length = width * height
+    #     for i in range(0, length):
+    #         x = ptopleft.x + i % width
+    #         y = ptopleft.y + int(i / width)
+    #         globalId = self.convertMapv2Mapi(Position(x,y))
+    #         submap.append(self[globalId])
 
     def convertClusteri2Mapi(self, i, clusterid):
         p = self.convertClusteri2Mapv(i, clusterid)
         return self.convertMapv2Mapi(p) 
-    
+
     def convertMapv2Mapi(self, p):
         return p.y * self.width + p.x
 
@@ -295,7 +295,7 @@ class Map:
         x = (clusterid % self.clusters) * self.cwidth + p.x
         y = int(clusterid / self.clusters) * self.cheight + p.y
         return self.convertMapv2Mapi(Position(x,y)) 
-	
+
     def convertMapv2ClusterId(self, p):
         cx = int(p.x / float(self.cwidth))
         cy = int(p.y / float(self.cheight))
@@ -305,7 +305,7 @@ class Map:
     def convertClusteri2Mapv(self, i, clusterid):
         y = int(clusterid / self.clusters) * self.cheight
         x = (clusterid % self.clusters) * self.cwidth
-        
+
         x += i % self.cwidth
         y += int(i / self.cwidth)
 
@@ -316,4 +316,4 @@ class Map:
         return self.convertMapi2Mapv(dirid)
 
     def isPositionValid(self, p):
-        return ( p.x >= 0 and p.x < self.width and p.y >= 0 and p.y < self.height)
+        return  0 <= p.x < self.width and 0 <= p.y < self.height

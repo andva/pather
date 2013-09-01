@@ -1,6 +1,6 @@
-WALL = 0;
-FLOOR = 1;
-PATH = 2;
+WALL = 0
+FLOOR = 1
+PATH = 2
 
 LIGHT_PINK = [255, 227, 208]
 LIGHT_BLUE = [96, 144, 144]
