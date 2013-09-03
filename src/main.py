@@ -25,6 +25,7 @@ def main():
         _renderer = Renderer(SCREEN_WIDTH, SCREEN_HEIGHT)
 
     done = False
+    running = True # Responsible for deciding if we are updating the position of the players
 
     while not done:
 
@@ -39,6 +40,10 @@ def main():
 
             if _inputHandler.getKeyPressed(K_g):
                 drawGraph = not drawGraph
+
+            if _inputHandler.getKeyPressed(K_n):
+                activePlayer = (activePlayer + 1) % len(players)
+
 
             if _inputHandler.getMousePressed(LEFT_MOUSE_BUTTON):
                 mousePosition = _inputHandler.getMousePosition(_map)
@@ -65,6 +70,7 @@ def main():
                 else:
                     print("Cant add player on " + str(mousePosition) + " " +
                           str(_map.isPositionValid(mousePosition)) + " " + str(_map[mousePosition.x, mousePosition.y] != WALL))
+
             if _inputHandler.getMousePressed(RIGHT_MOUSE_BUTTON, True):
                 if activePlayer != -1:
                     pass

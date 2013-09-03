@@ -11,26 +11,34 @@ class AStar:
 
     def findMinimum(self):
         minId = 0
-        for i in xrange(0, len(self.stack)):
+        for i in range(0, len(self.stack)):
             if self.stack[i].cost < self.stack[minId].cost:
                 minId = i
         new = self.stack.pop(minId)
         return new
 
     def solveBetweenNodes(self, clusterIds, nodeA, goal):
-        self.visitedPositions = []
-        cost = self.calculateHeuristic(nodeA.position, goal.position)
-        start = Node(nodeA.position, nodeA.clusterId, cost, 0)
-        self.stack = [start]
-        while len(self.stack) > 0:
-            # Find minimum active node
-            currentNode = self.findMinimum()
-            if currentNode.position == goal.position:
-                return currentNode.length
-            self.calculateHeuristic(currentNode.position, goal.position)
-            self.addNeighbouringNodes(currentNode, goal, clusterIds)
+        check = False
+        # Make sure that nodes belongs to same player
+        for sId in nodeA.affectedPlayers:
+            for gId in goal.affectedPlayers:
+                if gId is ALL_PLAYERS or sId is ALL_PLAYERS or sId is gId:
+                    check = True
 
-            self.setVisited(currentNode.position)
+        if check:
+            self.visitedPositions = []
+            cost = self.calculateHeuristic(nodeA.position, goal.position)
+            start = Node(nodeA.position, nodeA.clusterId, nodeA.affectedPlayers, cost, 0)
+            self.stack = [start]
+            while len(self.stack) > 0:
+                # Find minimum active node
+                currentNode = self.findMinimum()
+                if currentNode.position == goal.position:
+                    return currentNode.length
+                self.calculateHeuristic(currentNode.position, goal.position)
+                self.addNeighbouringNodes(currentNode, goal, clusterIds)
+
+                self.setVisited(currentNode.position)
 
         return -1
 
@@ -59,7 +67,7 @@ class AStar:
 
                 if cid in clusterIds:
                     cost = self.calculateHeuristic(p, goal.position)
-                    n = Node(p, cid, cost, node.length + 1)
+                    n = Node(p, cid, node.affectedPlayers, cost, node.length + 1)
                     self.stack.append(n)
             else:
                 self.setVisited(p)

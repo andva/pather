@@ -20,11 +20,26 @@ class Entrance:
         
 class Node:
 
-    def __init__(self, position, clusterId, cost = None, length = None):
+    def __init__(self, position, clusterId, affectedPlayers, cost = None, length = None, parentId = None):
+        assert isinstance(position, (Position, None))
         self.position = position
+
+        assert isinstance(clusterId, (int, long, None))
         self.clusterId = clusterId
+
+        self.affectedPlayers = affectedPlayers
+
+        if cost is not None:
+            assert isinstance(cost, (int, long))
         self.cost = cost
+
+        if length is not None:
+            assert isinstance(length, (int, long, None))
         self.length = length
+
+        if parentId is not None:
+            assert isinstance(parentId, (int, long, None))
+        self.parentId = parentId
 
     def __str__(self):
         v = "N:" + str(self.clusterId) + " " + str(self.position)
@@ -95,9 +110,6 @@ class Graph:
     def clearGraph(self):
         self.nodes = []
         del self.edges[:]
-
-    def dijkstra(self):
-        pass
 
     def getNodesInCluster(self, clusterId):
         clusterNodes = []

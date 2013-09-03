@@ -19,7 +19,7 @@ class Map:
         self.cwidth = int(width / float(nclusters))
         self.cheight = int(height / float(nclusters))
         self.CreateEntrances()
-        for n in xrange(0, nclusters * nclusters):
+        for n in range(0, nclusters * nclusters):
             self.intraClusterEdges(n)
 
     #Return status on board for given i (1D or 2D)
@@ -71,25 +71,21 @@ class Map:
     # Path between start and goal, only ok to walk in 
     # specified clusters.
     # Mode specifies if we want to return path or length
-    def calculatePath(self, start, goal, clusterIds, mode):
+    def calculatePath(self, start, goal, clusterIds, playerId):
         # Only length
         starSolver = AStar(self)
         t = starSolver.solveBetweenNodes(clusterIds, start, goal)
         if t > 0:
             # print("Found path between " + str(start) + " and " + str(goal))
             self.graph.addEdge(start, goal, t)
-        if mode == 0:
-            return 0
-        # Only path
-        elif mode == 1:
-            return []
+
 
     def intraClusterEdges(self, clusterId):
         nodes = self.graph.getNodesInCluster(clusterId)
         # All nodes against all other nodes
-        for i in xrange(0, len(nodes)):
+        for i in range(0, len(nodes)):
             startNode = nodes[i]
-            for j in xrange(i+1, len(nodes)):
+            for j in range(i+1, len(nodes)):
                 goalNode = nodes[j]
                 # Find length between the nodes
                 self.calculatePath(startNode, 
@@ -98,7 +94,7 @@ class Map:
     #Fill board with random walls
     def createBoard(self):
         self.board = [FLOOR] * self.width * self.height
-        for x in xrange(1, int(self.width * self.height / 10.0)):
+        for x in range(1, int(self.width * self.height / 10.0)):
             rid = random.randint(0, self.width * self.height-1)
             shape = random.uniform(0,1)
             pos = self.convertMapi2Mapv(rid)
@@ -106,11 +102,11 @@ class Map:
                 ###
                 #
                 #
-                for i in xrange(0, 3):
+                for i in range(0, 3):
                     p = [None, None]
                     p[0] = pos + Position(0, i)
                     p[1] = pos + Position(i, 0)
-                    for j in xrange(0,2):
+                    for j in range(0,2):
                         if self.isPositionValid(p[j]):
                             self[p[j].x, p[j].y] = WALL
             elif shape < 0.2:
@@ -118,7 +114,7 @@ class Map:
                 ###
                 if self.isPositionValid(Position(pos.x, pos.y - 1)):
                     self[pos.x, pos.y - 1] = WALL
-                for j in xrange(0,3):
+                for j in range(0,3):
                     p = Position(pos.x - 1 + j, pos.y)
                     if self.isPositionValid(p):
                         self[p.x, p.y] = WALL
@@ -126,8 +122,8 @@ class Map:
             elif shape < 0.35:
                 ##
                 ##
-                for i in xrange(0,3):
-                    for j in xrange(0, 3):
+                for i in range(0,3):
+                    for j in range(0, 3):
                         p = Position(pos.x + i, pos.y + j)
                         if self.isPositionValid(p):
                             self[p.x, p.y] = WALL
@@ -142,25 +138,25 @@ class Map:
                 self.board[rid] = WALL
 
 
-    def findEdge(self, clusterId, dirid):
+    def findEdge(self, clusterId, dirId):
         sizeId = 1
         w =  self.clusters
         edges = [-1, 0]
         wasLastFloor = False
        #return empty list if border 
-        if ((clusterId < w and dirid == 0) or
-            ((clusterId * self.cwidth) % self.width == 0 and dirid == 1) or
-            dirid > 1):
+        if ((clusterId < w and dirId == 0) or
+            ((clusterId * self.cwidth) % self.width == 0 and dirId == 1) or
+            dirId > 1):
             return edges
         else:
             #set up offsets
-            if dirid == 0:
+            if dirId == 0:
                 clusterLength = self.cwidth
                 offset = Position(0, -1)
                 poffset = Position(1, 0)
 
 
-            else: # dirid == 1:
+            else: # dirId == 1:
                 clusterLength = self.cheight
                 offset = Position(-1, 0)
                 poffset = Position(0, 1)
@@ -200,7 +196,7 @@ class Map:
             self[edgeId] = PATH
         p = self.convertMapi2Mapv(edgeId)
         clusterId = self.convertMapv2ClusterId(p)
-        return Node(p, clusterId)
+        return Node(p, clusterId, [ALL_PLAYERS])
 
     def parseEdgeList(self, edgeList):
         value = edgeList.pop(0)
