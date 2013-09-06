@@ -60,9 +60,6 @@ class Map:
         #If i is only one digit
         if isinstance(i, (long, int)):
             return i
-        #if i is Position
-        # if(isinstance(i, Position)):
-        #     return i.x + i.y * self.width
         #if i is 2D
         if len(i) > 2:
             raise IndexError
@@ -71,14 +68,43 @@ class Map:
     # Path between start and goal, only ok to walk in 
     # specified clusters.
     # Mode specifies if we want to return path or length
-    def calculatePath(self, start, goal, clusterIds, playerId):
+    def calculatePath(self, start, goal, clusterIds):
         # Only length
         starSolver = AStar(self)
         t = starSolver.solveBetweenNodes(clusterIds, start, goal)
         if t > 0:
             # print("Found path between " + str(start) + " and " + str(goal))
             self.graph.addEdge(start, goal, t)
+            return True
+        else:
+            return False
 
+    def addAndConnectNodeToGraph(self, node):
+        if not self.graph.addNode(node):
+            print "No node added!"
+            print "Trying to update players in node"
+            nodes = self.graph.getNodesInCluster(node.clusterId)
+            for n in nodes:
+                if node.position == n.position:
+                    for nid in node.affectedPlayers:
+                        t = True
+                        for id in n.affectedPlayers:
+                            if id is ALL_PLAYERS:
+                                t = False
+                            else:
+                                if nid is id:
+                                    t = False
+                        if t:
+                            n.affectedPlayers.append(nid)
+
+        else:
+            nodes = self.graph.getNodesInCluster(node.clusterId)
+            for goal in nodes:
+                if self.calculatePath(node, goal, [node.clusterId]):
+                    print "Found edge"
+                else:
+                    print "No edge"
+            pass
 
     def intraClusterEdges(self, clusterId):
         nodes = self.graph.getNodesInCluster(clusterId)
@@ -89,7 +115,7 @@ class Map:
                 goalNode = nodes[j]
                 # Find length between the nodes
                 self.calculatePath(startNode, 
-                        goalNode, [clusterId], 0)
+                        goalNode, [clusterId])
 
     #Fill board with random walls
     def createBoard(self):
@@ -154,7 +180,6 @@ class Map:
                 clusterLength = self.cwidth
                 offset = Position(0, -1)
                 poffset = Position(1, 0)
-
 
             else: # dirId == 1:
                 clusterLength = self.cheight

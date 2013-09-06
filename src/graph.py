@@ -98,8 +98,9 @@ class Graph:
         # Only add if node does not already exists
         for n in self.nodes:
             if n.position == node.position:
-                return
+                return False
         self.nodes.append(node)
+        return True
 
     def addEdge(self, node1, node2, cost):
         for e in self.edges:
