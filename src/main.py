@@ -6,11 +6,11 @@ if usePygame:
     from inputhandler import *
 from map import *
 from player import *
-W = 10
-H = 10
+W = 64
+H = 64
 SCREEN_WIDTH = 512
 SCREEN_HEIGHT = 512
-NUM_CLUSTERS_PER_DIM = 2
+NUM_CLUSTERS_PER_DIM = 8
 
 def main():
     _map = Map(W, H, NUM_CLUSTERS_PER_DIM)
@@ -49,7 +49,33 @@ def main():
                 mousePosition = _inputHandler.getMousePosition(_map)
                 if activePlayer != -1 and (_map.isPositionValid(mousePosition) and
                                                    _map[mousePosition.x, mousePosition.y] != WALL):
-                    players[activePlayer].position = mousePosition
+
+                    if player.start is not None:
+                        for node in _map.graph.nodes:
+                            if node.position == player.start.position:
+                                t1 = False
+                                t2 = False
+                                for id in node.affectedPlayers:
+                                    if id == player.id:
+                                        # This should be removed
+                                        t2 = True
+                                    else:
+                                        t = True
+                                if t1 and not t2:
+                                    node.affectedPlayers.remove(player.id)
+                                elif not t1 and t2:
+                                    # Remove all edges with node
+                                    edgesToRemove = []
+                                    for edge in _map.graph.edges:
+                                        if edge.i1 == node or edge.i2 == node:
+                                            edgesToRemove.append(edge)
+                                    for edge in edgesToRemove:
+                                        _map.graph.edges.remove(edge)
+                                    _map.graph.nodes.remove(node)
+                    cid = _map.convertMapv2ClusterId(mousePosition)
+                    players[activePlayer].updateStart(mousePosition, cid)
+
+                    _map.addAndConnectNodeToGraph(players[activePlayer].start)
                     updatedPlayer = True
 
             if _inputHandler.getMousePressed(RIGHT_MOUSE_BUTTON):
@@ -80,7 +106,6 @@ def main():
                                     for edge in edgesToRemove:
                                         _map.graph.edges.remove(edge)
                                     _map.graph.nodes.remove(node)
-
 
                     # Add new goal
                     cid = _map.convertMapv2ClusterId(mousePosition)

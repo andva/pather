@@ -100,11 +100,7 @@ class Map:
         else:
             nodes = self.graph.getNodesInCluster(node.clusterId)
             for goal in nodes:
-                if self.calculatePath(node, goal, [node.clusterId]):
-                    print "Found edge"
-                else:
-                    print "No edge"
-            pass
+                self.calculatePath(node, goal, [node.clusterId])
 
     def intraClusterEdges(self, clusterId):
         nodes = self.graph.getNodesInCluster(clusterId)

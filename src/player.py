@@ -24,13 +24,18 @@ class Player:
         self.goal = Node(goalPosition, goalClusterId, [self.id])
         return self.goal
 
-    def updateStart(self):
+    def updateStart(self, position = None, clusterId = None):
         """
         Updates start node for player.
         Requires position, currentCluster and id to be set.
 
         :return: self.start
         """
+        if position is not None and clusterId is not None:
+
+            self.position = position
+            self.currentCluster = clusterId
+
         self.start = Node(self.position, self.currentCluster, [self.id])
 
         return self.start
