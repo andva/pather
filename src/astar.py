@@ -86,6 +86,7 @@ class AStar:
         return abs(x) + abs(y)
 
 class PathAStar(AStar):
+
     def getReturn(self, node):
         return node
 
@@ -106,8 +107,12 @@ class GraphAStar(AStar):
         path = Path()
         nodes = []
         self.iterateAddNode(currentNode, nodes)
+        for n in nodes:
+            print str(n)
         for i in range(len(nodes) - 1):
-            self.iterativeGetReturn(nodes[i], nodes[i + 1], path)
+            i1 = len(nodes) - 1 - i
+            i2 = len(nodes) - 2 - i
+            self.iterativeGetReturn(nodes[i2], nodes[i1], path)
         return path
 
     def iterateAddNode(self, node, nodes):
@@ -117,16 +122,14 @@ class GraphAStar(AStar):
 
     def iterateAddToPath(self, node, path, goalPosition):
         if node != None:
+            path.addPosition(node.position)
             if node.position != goalPosition:
-                path.addPosition(node.position)
                 self.iterateAddToPath(node.parent, path, goalPosition)
 
     def iterativeGetReturn(self, node, node2, path):
-        n = self.mapSolver.solveBetweenNodes([ALL_CLUSTERS], node, node2)
+        n = self.mapSolver.solveBetweenNodes([ALL_CLUSTERS], node2, node)
         if n != -1:
-            # self.iterativeGetReturn(n, path, node.parent.position)
             self.iterateAddToPath(n, path, node2.position)
-
 
     def addNeighbouringNodes(self, parent, goal, clusterIds):
         for edge in self.gameMap.graph.edges:

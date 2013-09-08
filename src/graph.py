@@ -12,6 +12,8 @@ class Position:
         return 2
     def __eq__(self, p2):
         return self.x == p2.x and self.y == p2.y
+    def __ne__(self, other):
+        return self.x != other.x or self.y != other.y
 
 class Entrance:
     def __init__(self, mapId1, mapId2):

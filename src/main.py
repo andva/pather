@@ -6,11 +6,11 @@ if usePygame:
     from inputhandler import *
 from map import *
 from player import *
-W = 24
-H = 24
+W = 6
+H = 6
 SCREEN_WIDTH = 512
 SCREEN_HEIGHT = 512
-NUM_CLUSTERS_PER_DIM = 4
+NUM_CLUSTERS_PER_DIM = 2
 
 def main():
     _map = Map(W, H, NUM_CLUSTERS_PER_DIM)
@@ -130,9 +130,10 @@ def main():
                         player.updateGoal(mousePosition, cid)
                         _map.addAndConnectNodeToGraph(players[activePlayer].goal)
                         player.path = _map.calculatePathInGraph(player.start, player.goal, player.id)
-                for player in players:
-                    # player.walk()
-                    pass
+
+                if _inputHandler.getKeyPressed(K_s):
+                    for player in players:
+                        player.walk()
             _renderer.update(_map, players, activePlayer, drawClusters, drawGraph)
         else:
             done = True
