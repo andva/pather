@@ -4,14 +4,14 @@ class Position:
         self.y = y
     def __str__(self):
         return "[" + str(self.x) + "," + str(self.y) + "]"
-    def __add__(p1, p2):
-        return Position(p1.x + p2.x, p1.y + p2.y)
+    def __add__(self, p2):
+        return Position(self.x + p2.x, self.y + p2.y)
     def __getitem__(self):
-        return [x, y]
+        return [self.x, self.y]
     def __len__(self):
         return 2
-    def __eq__(p1, p2):
-        return (p1.x == p2.x and p1.y == p2.y)
+    def __eq__(self, p2):
+        return self.x == p2.x and self.y == p2.y
 
 class Entrance:
     def __init__(self, mapId1, mapId2):
@@ -20,14 +20,33 @@ class Entrance:
         
 class Node:
 
-    def __init__(self, position, clusterId, cost = None):
+    def __init__(self, position, clusterId, affectedPlayers, cost = None, length = None, parentId = None):
+        assert isinstance(position, (Position, None))
         self.position = position
+
+        assert isinstance(clusterId, (int, long, None))
         self.clusterId = clusterId
+
+        self.affectedPlayers = affectedPlayers
+
+        if cost is not None:
+            assert isinstance(cost, (int, long))
         self.cost = cost
-        self.length = None
+
+        if length is not None:
+            assert isinstance(length, (int, long, None))
+        self.length = length
+
+        if parentId is not None:
+            assert isinstance(parentId, (int, long, None))
+        self.parentId = parentId
 
     def __str__(self):
-        return "N:" + str(self.clusterId) + " " + str(self.position) + " " + str(self.cost)
+        v = "N:" + str(self.clusterId) + " " + str(self.position)
+        if self.cost is not None:
+            v += " " + self.cost
+            v += " " + self.length
+        return v
 
 class Edge:
     def __init__(self, i1, i2, cost):
@@ -70,7 +89,7 @@ class Graph:
         return nv
 
     def edgesAsString(self):
-        res = "";
+        res = ""
         for e in self.edges:
             res += str(e) + "\n"
         return res
@@ -78,22 +97,20 @@ class Graph:
     def addNode(self, node):
         # Only add if node does not already exists
         for n in self.nodes:
-            if (n.position == node.position):
-                return
+            if n.position == node.position:
+                return False
         self.nodes.append(node)
+        return True
 
     def addEdge(self, node1, node2, cost):
         for e in self.edges:
-            if(Edge(node1, node2, cost) == e):
+            if Edge(node1, node2, cost) == e:
                 return
         self.edges.append(Edge(node1, node2, cost))
 
     def clearGraph(self):
         self.nodes = []
         del self.edges[:]
-
-    def djikstra(self):
-        pass
 
     def getNodesInCluster(self, clusterId):
         clusterNodes = []

@@ -3,9 +3,9 @@ import random
 from astar import AStar
 from globalconsts import *
 
-TRANSITION_CONSTANT = 6;
+TRANSITION_CONSTANT = 6
 
-ADD_EDGES_TO_MAP = True;
+ADD_EDGES_TO_MAP = True
 
 class Map:
     def __init__(self, width, height, nclusters):
@@ -19,86 +19,105 @@ class Map:
         self.cwidth = int(width / float(nclusters))
         self.cheight = int(height / float(nclusters))
         self.CreateEntrances()
-        for n in xrange(0, nclusters * nclusters):
+        for n in range(0, nclusters * nclusters):
             self.intraClusterEdges(n)
-    
+
     #Return status on board for given i (1D or 2D)
     def __getitem__(self,i):
-        return self.board[self.getoffset(i)]
+        return self.board[self.getOffset(i)]
 
     def __setitem__(self,i,value):
-        self.setoffset(i, value)
+        self.setOffset(i, value)
 
     #Converts board to string
     def __str__(self):
         v = ""
         for i in range(0, self.width * self.height):
-            if(i % self.width == 0):
+            if i % self.width == 0:
                 v += str('\n')
-                if(int(i / float(self.width)) % self.cheight == 0):
+                if int(i / float(self.width)) % self.cheight == 0:
                     v += str('\n')
-            if(i % self.cwidth == 0):
+            if i % self.cwidth == 0:
                 v += str('  ')
-            if(self[i] == WALL):
+            if self[i] == WALL:
                 v += str('O')
-            elif(self[i] == PATH):
+            elif self[i] == PATH:
                 v += str(' ')
             else:
                 v += str('M')
         return v
     # Setter for 1D and 2D
-    def setoffset(self, i, value):
-        if(isinstance(i, (long, int))):
+    def setOffset(self, i, value):
+        if isinstance(i, (long, int)):
             self.board[i] = value
             return
-        
-        if(len(i) > 2):
+
+        if len(i) > 2:
             raise IndexError
         self.board[i[0] + i[1] * self.width] = value
     #Getter for 1D and 2D, used in getitem
-    def getoffset(self,i):
+    def getOffset(self,i):
         #If i is only one digit
-        if(isinstance(i, (long, int))):
+        if isinstance(i, (long, int)):
             return i
-        #if i is Position
-        # if(isinstance(i, Position)):
-        #     return i.x + i.y * self.width
         #if i is 2D
-        if(len(i) > 2):
+        if len(i) > 2:
             raise IndexError
         return i[0] + i[1] * self.width
 
     # Path between start and goal, only ok to walk in 
     # specified clusters.
     # Mode specifies if we want to return path or length
-    def calculatePath(self, start, goal, clusterIds, mode):
+    def calculatePath(self, start, goal, clusterIds):
         # Only length
         starSolver = AStar(self)
         t = starSolver.solveBetweenNodes(clusterIds, start, goal)
         if t > 0:
             # print("Found path between " + str(start) + " and " + str(goal))
             self.graph.addEdge(start, goal, t)
-        if mode == 0:
-            return 0
-        # Only path
-        elif mode == 1:
-            return []
+            return True
+        else:
+            return False
+
+    def addAndConnectNodeToGraph(self, node):
+        if not self.graph.addNode(node):
+            print "No node added!"
+            print "Trying to update players in node"
+            nodes = self.graph.getNodesInCluster(node.clusterId)
+            for n in nodes:
+                if node.position == n.position:
+                    for nid in node.affectedPlayers:
+                        t = True
+                        for id in n.affectedPlayers:
+                            if id is ALL_PLAYERS:
+                                t = False
+                            else:
+                                if nid is id:
+                                    t = False
+                        if t:
+                            print "Appending id to aff. players" + str(nid)
+                            n.affectedPlayers.append(nid)
+
+        else:
+            nodes = self.graph.getNodesInCluster(node.clusterId)
+            for goal in nodes:
+                self.calculatePath(node, goal, [node.clusterId])
 
     def intraClusterEdges(self, clusterId):
         nodes = self.graph.getNodesInCluster(clusterId)
         # All nodes against all other nodes
-        for i in xrange(0, len(nodes)):
+        for i in range(0, len(nodes)):
             startNode = nodes[i]
-            for j in xrange(i+1, len(nodes)):
+            for j in range(i+1, len(nodes)):
                 goalNode = nodes[j]
                 # Find length between the nodes
                 self.calculatePath(startNode, 
-                        goalNode, [clusterId], 0)
-        
+                        goalNode, [clusterId])
+
     #Fill board with random walls
     def createBoard(self):
         self.board = [FLOOR] * self.width * self.height
-        for x in xrange(1, int(self.width * self.height / 10.0)):
+        for x in range(1, int(self.width * self.height / 10.0)):
             rid = random.randint(0, self.width * self.height-1)
             shape = random.uniform(0,1)
             pos = self.convertMapi2Mapv(rid)
@@ -106,11 +125,11 @@ class Map:
                 ###
                 #
                 #
-                for i in xrange(0, 3):
+                for i in range(0, 3):
                     p = [None, None]
                     p[0] = pos + Position(0, i)
                     p[1] = pos + Position(i, 0)
-                    for j in xrange(0,2):
+                    for j in range(0,2):
                         if self.isPositionValid(p[j]):
                             self[p[j].x, p[j].y] = WALL
             elif shape < 0.2:
@@ -118,16 +137,16 @@ class Map:
                 ###
                 if self.isPositionValid(Position(pos.x, pos.y - 1)):
                     self[pos.x, pos.y - 1] = WALL
-                for j in xrange(0,3):
+                for j in range(0,3):
                     p = Position(pos.x - 1 + j, pos.y)
                     if self.isPositionValid(p):
                         self[p.x, p.y] = WALL
-                    
+
             elif shape < 0.35:
                 ##
                 ##
-                for i in xrange(0,3):
-                    for j in xrange(0, 3):
+                for i in range(0,3):
+                    for j in range(0, 3):
                         p = Position(pos.x + i, pos.y + j)
                         if self.isPositionValid(p):
                             self[p.x, p.y] = WALL
@@ -136,39 +155,38 @@ class Map:
                 ##
                 self[pos.x, pos.y] = WALL
                 if self.isPositionValid(Position(pos.x + 1, pos.y)):
-                    self[pos.x + 1, pos.y] + WALL
+                    self[pos.x + 1, pos.y] = WALL
             else:
                 # 
                 self.board[rid] = WALL
-                
- 
-    def findEdge(self, clusterId, dirid):
+
+
+    def findEdge(self, clusterId, dirId):
         sizeId = 1
         w =  self.clusters
         edges = [-1, 0]
         wasLastFloor = False
        #return empty list if border 
-        if ((clusterId < w and dirid == 0) or
-            ((clusterId * self.cwidth) % self.width == 0 and dirid == 1) or
-            dirid > 1):
+        if ((clusterId < w and dirId == 0) or
+            ((clusterId * self.cwidth) % self.width == 0 and dirId == 1) or
+            dirId > 1):
             return edges
         else:
             #set up offsets
-            if(dirid == 0):
+            if dirId == 0:
                 clusterLength = self.cwidth
                 offset = Position(0, -1)
                 poffset = Position(1, 0)
-                sp = Position(0,0)
 
-            elif(dirid == 1):
+            else: # dirId == 1:
                 clusterLength = self.cheight
                 offset = Position(-1, 0)
                 poffset = Position(0, 1)
-                sp = Position(0,0)
-            
+            sp = Position(0,0)
+
             # Find world self position
             worldPosition = self.convertClusterv2Mapv(sp, clusterId)
-            
+
             #Loop trough border of cluster.
             for j in range(0, clusterLength):
                 #Get position in world of current brick
@@ -188,7 +206,7 @@ class Map:
                     # Add to size count
                     edges[sizeId] += 1
                 else:
-                    if(wasLastFloor):
+                    if wasLastFloor:
                         edges.append(-1)
                         edges.append(0)
                         sizeId = len(edges) - 1
@@ -200,7 +218,7 @@ class Map:
             self[edgeId] = PATH
         p = self.convertMapi2Mapv(edgeId)
         clusterId = self.convertMapv2ClusterId(p)
-        return Node(p, clusterId)
+        return Node(p, clusterId, [ALL_PLAYERS])
 
     def parseEdgeList(self, edgeList):
         value = edgeList.pop(0)
@@ -232,7 +250,7 @@ class Map:
             self.graph.addNode(n2)
             self.graph.addEdge(n1, n2, 1)
             for i in range(0, edgeNum):
-                #Clear all edges in edgelist
+                #Clear all edges in edgeList
                 edgeList.pop(0)
         else:
             # Create two entrances in each edge
@@ -250,7 +268,7 @@ class Map:
             self.graph.addEdge(nodes[0], nodes[1], 1)
             self.graph.addEdge(nodes[2], nodes[3], 1)
             for i in range(0, edgeNum):
-                #Clear all edges in edgelist
+                #Clear all edges in edgeList
                 edgeList.pop(0)
 
         # If edge have more parts
@@ -268,21 +286,10 @@ class Map:
                 if len(edge) > 2:
                     self.parseEdgeList(edge)
 
-    def createSubMap(self, ptopleft, pbotright):
-        submap = []
-        width = (pbotright.x - ptopleft.x)
-        height = (pbotright.y - ptopleft.y)
-        length = width * height
-        for i in range(0, length):
-		x = ptopleft.x + i % width
-        y = ptopleft.y + int(i / width)
-        globalId = self.convertMapv2Mapi(Position(x,y))
-        submap.append(self[globalId])
-
-    def convertClusteri2Mapi(self, i, clusterid):
-        p = self.convertClusteri2Mapv(i, clusterid)
+    def convertClusteri2Mapi(self, i, clusterId):
+        p = self.convertClusteri2Mapv(i, clusterId)
         return self.convertMapv2Mapi(p) 
-    
+
     def convertMapv2Mapi(self, p):
         return p.y * self.width + p.x
 
@@ -291,29 +298,29 @@ class Map:
         y = int(i / self.width)
         return Position(x, y)
 
-    def convertClusterv2Mapi(self, p, clusterid):
-        x = (clusterid % self.clusters) * self.cwidth + p.x
-        y = int(clusterid / self.clusters) * self.cheight + p.y
+    def convertClusterv2Mapi(self, p, clusterId):
+        x = (clusterId % self.clusters) * self.cwidth + p.x
+        y = int(clusterId / self.clusters) * self.cheight + p.y
         return self.convertMapv2Mapi(Position(x,y)) 
-	
+
     def convertMapv2ClusterId(self, p):
         cx = int(p.x / float(self.cwidth))
         cy = int(p.y / float(self.cheight))
         cid = cy * self.clusters + cx
         return cid
 
-    def convertClusteri2Mapv(self, i, clusterid):
-        y = int(clusterid / self.clusters) * self.cheight
-        x = (clusterid % self.clusters) * self.cwidth
-        
+    def convertClusteri2Mapv(self, i, clusterId):
+        y = int(clusterId / self.clusters) * self.cheight
+        x = (clusterId % self.clusters) * self.cwidth
+
         x += i % self.cwidth
         y += int(i / self.cwidth)
 
         return Position(x,y)
 
-    def convertClusterv2Mapv(self, p, clusterid):
-        dirid = self.convertClusterv2Mapi(p, clusterid)
-        return self.convertMapi2Mapv(dirid)
+    def convertClusterv2Mapv(self, p, clusterId):
+        dirId = self.convertClusterv2Mapi(p, clusterId)
+        return self.convertMapi2Mapv(dirId)
 
     def isPositionValid(self, p):
-        return ( p.x >= 0 and p.x < self.width and p.y >= 0 and p.y < self.height)
+        return  0 <= p.x < self.width and 0 <= p.y < self.height
