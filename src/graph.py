@@ -20,7 +20,7 @@ class Entrance:
         
 class Node:
 
-    def __init__(self, position, clusterId, affectedPlayers, cost = None, length = None, parentId = None):
+    def __init__(self, position, clusterId, affectedPlayers, cost = None, length = None, parent = None):
         assert isinstance(position, (Position, None))
         self.position = position
 
@@ -37,15 +37,15 @@ class Node:
             assert isinstance(length, (int, long, None))
         self.length = length
 
-        if parentId is not None:
-            assert isinstance(parentId, (int, long, None))
-        self.parentId = parentId
+        if parent is not None:
+            assert isinstance(parent, Node)
+        self.parent = parent
 
     def __str__(self):
         v = "N:" + str(self.clusterId) + " " + str(self.position)
         if self.cost is not None:
-            v += " " + self.cost
-            v += " " + self.length
+            v += " " + str(self.cost)
+            v += " " + str(self.length)
         return v
 
 class Edge:

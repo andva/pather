@@ -31,7 +31,6 @@ def main():
 
         ###################
         if usePygame:
-            updatedPlayer = False
 
             done = _renderer.handleEvents()
 
@@ -91,11 +90,12 @@ def main():
                                         for edge in edgesToRemove:
                                             _map.graph.edges.remove(edge)
                                         _map.graph.nodes.remove(node)
+
                         cid = _map.convertMapv2ClusterId(mousePosition)
                         players[activePlayer].updateStart(mousePosition, cid)
-
                         _map.addAndConnectNodeToGraph(players[activePlayer].start)
-                        updatedPlayer = True
+                        if player.goal is not None:
+                            player.path = _map.calculatePathInGraph(player.start, player.goal, player.id)
 
                 if _inputHandler.getMousePressed(RIGHT_MOUSE_BUTTON):
                     mousePosition = _inputHandler.getMousePosition(_map)
@@ -110,7 +110,6 @@ def main():
                                     t2 = False
                                     for id in node.affectedPlayers:
                                         if id == player.id:
-                                            # This should be removed
                                             t2 = True
                                         else:
                                             t1 = True
@@ -126,18 +125,15 @@ def main():
                                             _map.graph.edges.remove(edge)
                                         _map.graph.nodes.remove(node)
 
-                    # Add new goal
-                    cid = _map.convertMapv2ClusterId(mousePosition)
-                    player.updateGoal(mousePosition, cid)
-                    _map.addAndConnectNodeToGraph(players[activePlayer].goal)
-                    updatedPlayer = True
-
-                if updatedPlayer:
-                    pass
-
+                        # Add new goal
+                        cid = _map.convertMapv2ClusterId(mousePosition)
+                        player.updateGoal(mousePosition, cid)
+                        _map.addAndConnectNodeToGraph(players[activePlayer].goal)
+                        player.path = _map.calculatePathInGraph(player.start, player.goal, player.id)
+                        print "Player: " + str(player)
                 for player in players:
-                    player.walk()
-
+                    # player.walk()
+                    pass
             _renderer.update(_map, players, activePlayer, drawClusters, drawGraph)
         else:
             done = True

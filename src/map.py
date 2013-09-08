@@ -1,9 +1,10 @@
 from graph import *
 import random
 from astar import AStar
+from astar import GraphAStar
 from globalconsts import *
 
-TRANSITION_CONSTANT = 6
+TRANSITION_CONSTANT = 5
 
 ADD_EDGES_TO_MAP = True
 
@@ -73,11 +74,20 @@ class Map:
         starSolver = AStar(self)
         t = starSolver.solveBetweenNodes(clusterIds, start, goal)
         if t > 0:
-            # print("Found path between " + str(start) + " and " + str(goal))
             self.graph.addEdge(start, goal, t)
             return True
         else:
             return False
+
+    def calculatePathInGraph(self, start, goal, playerId):
+        starSolver = GraphAStar(self)
+        t = starSolver.solveBetweenNodes([ALL_CLUSTERS], start, goal)
+        if len(t) > 0:
+
+            print("Found path between " + str(start) + " and " + str(goal))
+            print str(t)
+        pass
+        return t
 
     def addAndConnectNodeToGraph(self, node):
         if not self.graph.addNode(node):

@@ -74,8 +74,15 @@ class Renderer:
 
     def drawPlayers(self, board, players, activePlayer):
         for i, player in enumerate(players):
+            # Draw player path
+
             pos = self.calculateCenterOfNode(board, player.position)
             if i == activePlayer:
+                if player.path != None:
+                    for nodePos in player.path.array:
+                        position = self.calculateCenterOfNode(board, nodePos)
+                        pygame.gfxdraw.filled_circle(self.screen, int(position[0]), int(position[1]),
+                                                     self.CIRCLE_SIZE, GREEN)
                 color = ACTIVE_PLAYER_COLOR
             else:
                 color = PLAYER_COLOR

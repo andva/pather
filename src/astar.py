@@ -1,6 +1,7 @@
 from graph import Node
 from graph import Position
 from globalconsts import *
+from path import Path
 
 global FLOOR
 class AStar:
@@ -27,20 +28,22 @@ class AStar:
 
         if check:
             self.visitedPositions = []
-            cost = self.calculateHeuristic(nodeA.position, goal.position)
+            cost = self.calculateHeuristic(nodeA, goal, None)
             start = Node(nodeA.position, nodeA.clusterId, nodeA.affectedPlayers, cost, 0)
             self.stack = [start]
             while len(self.stack) > 0:
                 # Find minimum active node
                 currentNode = self.findMinimum()
                 if currentNode.position == goal.position:
-                    return currentNode.length
-                self.calculateHeuristic(currentNode.position, goal.position)
+                    # Create list of nodes from start to goal
+                    return self.getReturn(currentNode)
                 self.addNeighbouringNodes(currentNode, goal, clusterIds)
 
                 self.setVisited(currentNode.position)
-
         return -1
+
+    def getReturn(self, node):
+        return node.length
 
     def setVisited(self, position):
         self.visitedPositions.append(position)
@@ -66,15 +69,53 @@ class AStar:
                 cid = self.gameMap.convertMapv2ClusterId(p)
 
                 if cid in clusterIds:
-                    cost = self.calculateHeuristic(p, goal.position)
-                    n = Node(p, cid, node.affectedPlayers, cost, node.length + 1)
+                    n = Node(p, cid, node.affectedPlayers, 0, node.length + 1)
+                    n.cost = self.calculateHeuristic(n, goal, node.parent)
                     self.stack.append(n)
             else:
                 self.setVisited(p)
 
         # Manhattan distance between nodes
-    def calculateHeuristic(self, nodePos, goalPos):
+    def calculateHeuristic(self, node, goal, parent = None):
+        nodePos = node.position
+        goalPos = node.position
         x = nodePos.x - goalPos.x
         y = nodePos.y - goalPos.y
         return abs(x) + abs(y)
 
+class GraphAStar(AStar):
+
+    def calculateHeuristic(self, node, goal, parent = None):
+        if parent is None:
+            return 0
+        for edge in self.gameMap.edges:
+            if ((edge.i1.position == node.position and edge.i2.position == parent.position) or
+                    (edge.i2.position == node.position and edge.i1.position == parent.position)):
+                return parent.cost + edge.cost
+
+    def getReturn(self, currentNode):
+        path = Path()
+        self.iterativeGetReturn(currentNode, path)
+        print "L:" + str(len(path))
+        return path
+
+    def iterativeGetReturn(self, node, path):
+        if node is not None:
+            path.addPosition(Position(node.position.x, node.position.y))
+            self.iterativeGetReturn(node.parent, path)
+
+    def addNeighbouringNodes(self, parent, goal, clusterIds):
+        for edge in self.gameMap.graph.edges:
+            node = None
+            if edge.i1.position == parent.position:
+                if not self.isVisited(edge.i2.position):
+                    node = edge.i2
+
+            elif edge.i2.position == parent.position:
+                if not self.isVisited(edge.i1.position):
+                    node = edge.i1
+
+            # This comes true when we have a valid new node.
+            if node is not None:
+                n = Node(node.position, node.clusterId, node.affectedPlayers, parent.cost + edge.cost, parent.length + edge.cost, parent)
+                self.stack.append(n)
