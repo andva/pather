@@ -81,13 +81,8 @@ class Map:
 
     def calculatePathInGraph(self, start, goal, playerId):
         starSolver = GraphAStar(self)
-        t = starSolver.solveBetweenNodes([ALL_CLUSTERS], start, goal)
-        if len(t) > 0:
-
-            print("Found path between " + str(start) + " and " + str(goal))
-            print str(t)
-        pass
-        return t
+        path = starSolver.solveBetweenNodes([ALL_CLUSTERS], start, goal)
+        return path
 
     def addAndConnectNodeToGraph(self, node):
         if not self.graph.addNode(node):
@@ -169,7 +164,6 @@ class Map:
             else:
                 # 
                 self.board[rid] = WALL
-
 
     def findEdge(self, clusterId, dirId):
         sizeId = 1

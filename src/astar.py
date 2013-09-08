@@ -36,7 +36,9 @@ class AStar:
                 currentNode = self.findMinimum()
                 if currentNode.position == goal.position:
                     # Create list of nodes from start to goal
+
                     return self.getReturn(currentNode)
+
                 self.addNeighbouringNodes(currentNode, goal, clusterIds)
 
                 self.setVisited(currentNode.position)
@@ -68,8 +70,8 @@ class AStar:
             if self.gameMap.isPositionValid(p) and not self.isVisited(p):
                 cid = self.gameMap.convertMapv2ClusterId(p)
 
-                if cid in clusterIds:
-                    n = Node(p, cid, node.affectedPlayers, 0, node.length + 1)
+                if cid in clusterIds or ALL_CLUSTERS in clusterIds:
+                    n = Node(p, cid, node.affectedPlayers, 0, node.length + 1, node)
                     n.cost = self.calculateHeuristic(n, goal, node.parent)
                     self.stack.append(n)
             else:
@@ -83,7 +85,14 @@ class AStar:
         y = nodePos.y - goalPos.y
         return abs(x) + abs(y)
 
+class PathAStar(AStar):
+    def getReturn(self, node):
+        return node
+
 class GraphAStar(AStar):
+    def __init__(self, gameMap):
+        AStar.__init__(self, gameMap)
+        self.mapSolver = PathAStar(gameMap)
 
     def calculateHeuristic(self, node, goal, parent = None):
         if parent is None:
@@ -95,14 +104,29 @@ class GraphAStar(AStar):
 
     def getReturn(self, currentNode):
         path = Path()
-        self.iterativeGetReturn(currentNode, path)
-        print "L:" + str(len(path))
+        nodes = []
+        self.iterateAddNode(currentNode, nodes)
+        for i in range(len(nodes) - 1):
+            self.iterativeGetReturn(nodes[i], nodes[i + 1], path)
         return path
 
-    def iterativeGetReturn(self, node, path):
-        if node is not None:
-            path.addPosition(Position(node.position.x, node.position.y))
-            self.iterativeGetReturn(node.parent, path)
+    def iterateAddNode(self, node, nodes):
+        if node != None:
+            nodes.append(node)
+            self.iterateAddNode(node.parent, nodes)
+
+    def iterateAddToPath(self, node, path, goalPosition):
+        if node != None:
+            if node.position != goalPosition:
+                path.addPosition(node.position)
+                self.iterateAddToPath(node.parent, path, goalPosition)
+
+    def iterativeGetReturn(self, node, node2, path):
+        n = self.mapSolver.solveBetweenNodes([ALL_CLUSTERS], node, node2)
+        if n != -1:
+            # self.iterativeGetReturn(n, path, node.parent.position)
+            self.iterateAddToPath(n, path, node2.position)
+
 
     def addNeighbouringNodes(self, parent, goal, clusterIds):
         for edge in self.gameMap.graph.edges:

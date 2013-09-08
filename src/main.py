@@ -130,7 +130,6 @@ def main():
                         player.updateGoal(mousePosition, cid)
                         _map.addAndConnectNodeToGraph(players[activePlayer].goal)
                         player.path = _map.calculatePathInGraph(player.start, player.goal, player.id)
-                        print "Player: " + str(player)
                 for player in players:
                     # player.walk()
                     pass

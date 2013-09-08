@@ -22,11 +22,12 @@ class Renderer:
     def update(self, board, players, activePlayer, drawClusters, drawGraph):
         self.screen.fill(WHITE)
         self.drawBoard(board)
+        self.drawPlayers(board, players, activePlayer)
         if drawClusters:
             self.drawGrid(board)
         if drawGraph:
             self.drawGraph(board)
-        self.drawPlayers(board, players, activePlayer)
+
         pygame.display.update()
 
     def drawBoard(self, board):
@@ -78,14 +79,17 @@ class Renderer:
 
             pos = self.calculateCenterOfNode(board, player.position)
             if i == activePlayer:
-                if player.path != None:
+                c2 = OLIVE
+                color = ACTIVE_PLAYER_COLOR
+            else:
+                c2 = LIGHT_PINK
+                color = PLAYER_COLOR
+            if player.path != None:
+                if player.path.array != None:
                     for nodePos in player.path.array:
                         position = self.calculateCenterOfNode(board, nodePos)
                         pygame.gfxdraw.filled_circle(self.screen, int(position[0]), int(position[1]),
-                                                     self.CIRCLE_SIZE, GREEN)
-                color = ACTIVE_PLAYER_COLOR
-            else:
-                color = PLAYER_COLOR
+                                                     int(self.CIRCLE_SIZE / 2.0), c2)
             pygame.gfxdraw.aacircle(self.screen, int(pos[0]), int(pos[1]),
                                     self.CIRCLE_SIZE, color)
 
