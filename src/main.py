@@ -1,5 +1,5 @@
 # Implementation of near-optimal hierarchical pathfinder
-# import os, sys
+import os, sys
 usePygame = True
 if usePygame:
     from renderer import Renderer
@@ -91,11 +91,12 @@ def main():
                                             _map.graph.edges.remove(edge)
                                         _map.graph.nodes.remove(node)
 
-                        cid = _map.convertMapv2ClusterId(mousePosition)
-                        players[activePlayer].updateStart(mousePosition, cid)
-                        _map.addAndConnectNodeToGraph(players[activePlayer].start)
-                        if player.goal is not None:
-                            player.path = _map.calculatePathInGraph(player.start, player.goal, player.id)
+                            cid = _map.convertMapv2ClusterId(mousePosition)
+                            players[activePlayer].updateStart(mousePosition, cid)
+                            _map.addAndConnectNodeToGraph(players[activePlayer].start)
+                            if player.goal is not None:
+                                player.path = _map.calculatePathInGraph(player.start, player.goal, player.id)
+                                print "a " + str(player.path)
 
                 if _inputHandler.getMousePressed(RIGHT_MOUSE_BUTTON):
                     mousePosition = _inputHandler.getMousePosition(_map)
@@ -129,7 +130,10 @@ def main():
                         cid = _map.convertMapv2ClusterId(mousePosition)
                         player.updateGoal(mousePosition, cid)
                         _map.addAndConnectNodeToGraph(players[activePlayer].goal)
+
                         player.path = _map.calculatePathInGraph(player.start, player.goal, player.id)
+                        print "b " + str(player.path) + " " + str(player)
+                        sys.stdout.flush()
 
                 if _inputHandler.getKeyPressed(K_s):
                     for player in players:

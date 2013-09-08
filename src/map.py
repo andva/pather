@@ -80,6 +80,7 @@ class Map:
             return False
 
     def calculatePathInGraph(self, start, goal, playerId):
+        print "Enter"
         starSolver = GraphAStar(self)
         path = starSolver.solveBetweenNodes([ALL_CLUSTERS], start, goal)
         return path

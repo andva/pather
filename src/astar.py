@@ -3,6 +3,8 @@ from graph import Position
 from globalconsts import *
 from path import Path
 
+import traceback
+
 global FLOOR
 class AStar:
     def __init__(self, gameMap):
@@ -21,11 +23,17 @@ class AStar:
     def solveBetweenNodes(self, clusterIds, nodeA, goal):
         check = False
         # Make sure that nodes belongs to same player
+        nas = "nId: "
+        ngs = "gId: "
+        for gId in goal.affectedPlayers:
+            ngs += " " + str(gId)
+
         for sId in nodeA.affectedPlayers:
+            nas += " " + str(sId)
             for gId in goal.affectedPlayers:
                 if gId is ALL_PLAYERS or sId is ALL_PLAYERS or sId is gId:
                     check = True
-
+        print nas + " " + ngs + " " + str(check)
         if check:
             self.visitedPositions = []
             cost = self.calculateHeuristic(nodeA, goal, None)
@@ -42,9 +50,13 @@ class AStar:
                 self.addNeighbouringNodes(currentNode, goal, clusterIds)
 
                 self.setVisited(currentNode.position)
-        return -1
+        return self.getReturn(-1)
 
     def getReturn(self, node):
+        if isinstance(node, int):
+            return -1
+        print "Regular"
+        traceback.print_stack()
         return node.length
 
     def setVisited(self, position):
@@ -104,15 +116,21 @@ class GraphAStar(AStar):
                 return parent.cost + edge.cost
 
     def getReturn(self, currentNode):
-        path = Path()
+        if isinstance(currentNode, int):
+            return None
+        print "returning"
         nodes = []
         self.iterateAddNode(currentNode, nodes)
+        if len(nodes) == 0:
+            return None
+        path = Path()
         for n in nodes:
             print str(n)
         for i in range(len(nodes) - 1):
             i1 = len(nodes) - 1 - i
             i2 = len(nodes) - 2 - i
             self.iterativeGetReturn(nodes[i2], nodes[i1], path)
+        traceback.print_stack()
         return path
 
     def iterateAddNode(self, node, nodes):
@@ -123,13 +141,18 @@ class GraphAStar(AStar):
     def iterateAddToPath(self, node, path, goalPosition):
         if node != None:
             path.addPosition(node.position)
+
             if node.position != goalPosition:
                 self.iterateAddToPath(node.parent, path, goalPosition)
 
     def iterativeGetReturn(self, node, node2, path):
-        n = self.mapSolver.solveBetweenNodes([ALL_CLUSTERS], node2, node)
+        n = self.mapSolver.solveBetweenNodes([ALL_CLUSTERS], node, node2)
         if n != -1:
-            self.iterateAddToPath(n, path, node2.position)
+            if n.parent != None:
+                self.iterateAddToPath(n.parent, path, node.position)
+            else:
+                path.addPosition(n.position)
+
 
     def addNeighbouringNodes(self, parent, goal, clusterIds):
         for edge in self.gameMap.graph.edges:

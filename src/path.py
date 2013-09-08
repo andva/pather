@@ -1,7 +1,8 @@
 from map import Position
 
+
 class Path:
-    def __init__(self, array = None):
+    def __init__(self, array=None):
         # Make sure that the path is a list
         if array is not None:
             assert isinstance(array, (list, tuple))
@@ -17,7 +18,7 @@ class Path:
         return s
 
     def __len__(self):
-        if self.array == None:
+        if self.array is None:
             return 0
         return len(self.array)
 
@@ -30,5 +31,3 @@ class Path:
             return self.array.pop(0)
         else:
             return None
-
-

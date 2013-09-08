@@ -15,13 +15,14 @@ class Player:
         self.start = self.updateStart()
 
     def __str__(self):
-        return "Player " + str(self.name) + " [" + str(self.position) + ", " + str(self.goal) + "]"
+        return "Player " + str(self.name) + " [s:" + str(self.start) + ", p:" + str(self.position) + ", g:" + str(self.goal) + "]"
 
     def updatePosition(self, position):
         self.position = position
 
     def updateGoal(self, goalPosition, goalClusterId):
         self.goal = Node(goalPosition, goalClusterId, [self.id])
+        self.start = self.updateStart()
         return self.goal
 
     def updateStart(self, position = None, clusterId = None):
@@ -43,3 +44,6 @@ class Player:
     def walk(self):
         if self.path is not None and self.position != self.goal.position:
             self.position = self.path.popNextPosition()
+        else:
+            self.path.array = None
+            self.path = None

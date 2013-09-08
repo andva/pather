@@ -1,5 +1,4 @@
 import pygame
-
 from globalconsts import *
 from pygame.gfxdraw import aacircle
 
@@ -84,8 +83,9 @@ class Renderer:
             else:
                 c2 = LIGHT_PINK
                 color = PLAYER_COLOR
-            if player.path != None:
-                if player.path.array != None:
+            if player.path is not None:
+                # print str(player.path)
+                if player.path.array is not None:
                     for nodePos in player.path.array:
                         position = self.calculateCenterOfNode(board, nodePos)
                         pygame.gfxdraw.filled_circle(self.screen, int(position[0]), int(position[1]),
