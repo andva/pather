@@ -95,6 +95,7 @@ class Map:
                                 if nid is id:
                                     t = False
                         if t:
+                            print "Appending id to aff. players" + str(nid)
                             n.affectedPlayers.append(nid)
 
         else:

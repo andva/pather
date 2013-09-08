@@ -41,5 +41,5 @@ class Player:
         return self.start
 
     def walk(self):
-        if self.position is not self.goal:
+        if self.path is not None and self.position is not self.goal:
             self.position = self.path.popNextPosition()
