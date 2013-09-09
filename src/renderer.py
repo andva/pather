@@ -1,5 +1,4 @@
 import pygame
-
 from globalconsts import *
 from pygame.gfxdraw import aacircle
 
@@ -22,11 +21,12 @@ class Renderer:
     def update(self, board, players, activePlayer, drawClusters, drawGraph):
         self.screen.fill(WHITE)
         self.drawBoard(board)
+        self.drawPlayers(board, players, activePlayer)
         if drawClusters:
             self.drawGrid(board)
         if drawGraph:
             self.drawGraph(board)
-        self.drawPlayers(board, players, activePlayer)
+
         pygame.display.update()
 
     def drawBoard(self, board):
@@ -74,11 +74,22 @@ class Renderer:
 
     def drawPlayers(self, board, players, activePlayer):
         for i, player in enumerate(players):
+            # Draw player path
+
             pos = self.calculateCenterOfNode(board, player.position)
             if i == activePlayer:
+                c2 = OLIVE
                 color = ACTIVE_PLAYER_COLOR
             else:
+                c2 = LIGHT_PINK
                 color = PLAYER_COLOR
+            if player.path is not None:
+                # print str(player.path)
+                if player.path.array is not None:
+                    for nodePos in player.path.array:
+                        position = self.calculateCenterOfNode(board, nodePos)
+                        pygame.gfxdraw.filled_circle(self.screen, int(position[0]), int(position[1]),
+                                                     int(self.CIRCLE_SIZE / 2.0), c2)
             pygame.gfxdraw.aacircle(self.screen, int(pos[0]), int(pos[1]),
                                     self.CIRCLE_SIZE, color)
 

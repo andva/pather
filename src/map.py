@@ -1,9 +1,10 @@
 from graph import *
 import random
 from astar import AStar
+from astar import GraphAStar
 from globalconsts import *
 
-TRANSITION_CONSTANT = 6
+TRANSITION_CONSTANT = 5
 
 ADD_EDGES_TO_MAP = True
 
@@ -73,11 +74,61 @@ class Map:
         starSolver = AStar(self)
         t = starSolver.solveBetweenNodes(clusterIds, start, goal)
         if t > 0:
-            # print("Found path between " + str(start) + " and " + str(goal))
             self.graph.addEdge(start, goal, t)
             return True
         else:
             return False
+
+    def removeAllRef(self, player):
+        nodesToRemove = []
+
+        for node in self.graph.nodes:
+            for id in node.affectedPlayers:
+                if id == player.id and len(node.affectedPlayers) == 1:
+                    nodesToRemove.append(node)
+                else:
+                    try:
+                        node.affectedPlayers.remove(player.id)
+                    except ValueError:
+                        pass
+
+        edgesToRemove = []
+        for edge in self.graph.edges:
+            if edge.i1 in nodesToRemove or edge.i2 in nodesToRemove:
+                edgesToRemove.append(edge)
+
+        for edge in edgesToRemove:
+            self.graph.edges.remove(edge)
+        for node in nodesToRemove:
+            self.graph.nodes.remove(node)
+
+    def removeInGraph(self, player, pos):
+        for node in self.graph.nodes:
+            if node.position == pos and (player.goal == None or (player.goal != None and player.start.position != player.goal.position) ):
+                t1 = False
+                t2 = False
+                for id in node.affectedPlayers:
+                    if id == player.id:
+                        # This should be removed
+                        t2 = True
+                    else:
+                        t = True
+                if t1 and not t2:
+                    node.affectedPlayers.remove(player.id)
+                elif not t1 and t2:
+                    # Remove all edges with node
+                    edgesToRemove = []
+                    for edge in self.graph.edges:
+                        if edge.i1 == node or edge.i2 == node:
+                            edgesToRemove.append(edge)
+                    for edge in edgesToRemove:
+                        self.graph.edges.remove(edge)
+                    self.graph.nodes.remove(node)
+
+    def calculatePathInGraph(self, start, goal, playerId):
+        starSolver = GraphAStar(self)
+        path = starSolver.solveBetweenNodes([ALL_CLUSTERS], start, goal)
+        return path
 
     def addAndConnectNodeToGraph(self, node):
         if not self.graph.addNode(node):
@@ -159,7 +210,6 @@ class Map:
             else:
                 # 
                 self.board[rid] = WALL
-
 
     def findEdge(self, clusterId, dirId):
         sizeId = 1
