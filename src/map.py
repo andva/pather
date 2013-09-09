@@ -81,7 +81,7 @@ class Map:
 
     def removeInGraph(self, player, pos):
         for node in self.graph.nodes:
-            if node.position == pos and player.goal != None and player.start.position != player.goal.position:
+            if node.position == pos and player.goal == None or  player.start.position != player.goal.positions:
                 t1 = False
                 t2 = False
                 for id in node.affectedPlayers:

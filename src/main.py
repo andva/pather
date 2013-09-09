@@ -41,8 +41,24 @@ def main():
                 drawGraph = not drawGraph
 
             if _inputHandler.getKeyPressed(K_r):
+                for player in players:
+                    # Cheat to remove all nodes.
+                    if player.goal != None:
+                        _map.removeInGraph(player, player.goal.position)
+                    _map.removeInGraph(player, player.start.position)
+
                 players = []
                 activePlayer = -1
+
+            if _inputHandler.getKeyPressed(K_t):
+                if activePlayer >= 0:
+                    player = players[activePlayer]
+                    if player != None:
+                        _map.removeInGraph(player, player.goal.position)
+                    _map.removeInGraph(player, player.start.position)
+
+                    players.pop(activePlayer)
+                    activePlayer = activePlayer - 1
 
             if _inputHandler.getMousePressed(LEFT_MOUSE_BUTTON, True):
                 mousePosition = _inputHandler.getMousePosition(_map)
@@ -74,27 +90,6 @@ def main():
 
                         if player.start is not None:
                             _map.removeInGraph(player, player.start.position)
-                            # for node in _map.graph.nodes:
-                            #     if node.position == player.start.position:
-                            #         t1 = False
-                            #         t2 = False
-                            #         for id in node.affectedPlayers:
-                            #             if id == player.id:
-                            #                 # This should be removed
-                            #                 t2 = True
-                            #             else:
-                            #                 t = True
-                            #         if t1 and not t2:
-                            #             node.affectedPlayers.remove(player.id)
-                            #         elif not t1 and t2:
-                            #             # Remove all edges with node
-                            #             edgesToRemove = []
-                            #             for edge in _map.graph.edges:
-                            #                 if edge.i1 == node or edge.i2 == node:
-                            #                     edgesToRemove.append(edge)
-                            #             for edge in edgesToRemove:
-                            #                 _map.graph.edges.remove(edge)
-                            #             _map.graph.nodes.remove(node)
 
                             cid = _map.convertMapv2ClusterId(mousePosition)
                             players[activePlayer].updateStart(mousePosition, cid)
@@ -111,26 +106,6 @@ def main():
                         # Delete old goal
                         if player.goal is not None:
                             _map.removeInGraph(player, player.goal.position)
-                            # for node in _map.graph.nodes:
-                            #     if node.position == player.goal.position:
-                            #         t1 = False
-                            #         t2 = False
-                            #         for id in node.affectedPlayers:
-                            #             if id == player.id:
-                            #                 t2 = True
-                            #             else:
-                            #                 t1 = True
-                            #         if t1 and t2:
-                            #             node.affectedPlayers.remove(player.id)
-                            #         elif not t1 and t2:
-                            #             # Remove all edges with node
-                            #             edgesToRemove = []
-                            #             for edge in _map.graph.edges:
-                            #                 if edge.i1 == node or edge.i2 == node:
-                            #                     edgesToRemove.append(edge)
-                            #             for edge in edgesToRemove:
-                            #                 _map.graph.edges.remove(edge)
-                            #             _map.graph.nodes.remove(node)
 
                         # Add new goal
                         cid = _map.convertMapv2ClusterId(mousePosition)
