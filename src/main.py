@@ -6,11 +6,11 @@ if usePygame:
     from inputhandler import *
 from map import *
 from player import *
-W = 6
-H = 6
+W = 16
+H = 16
 SCREEN_WIDTH = 512
 SCREEN_HEIGHT = 512
-NUM_CLUSTERS_PER_DIM = 2
+NUM_CLUSTERS_PER_DIM = 4
 
 def main():
     _map = Map(W, H, NUM_CLUSTERS_PER_DIM)
@@ -107,35 +107,36 @@ def main():
                                                        _map[mousePosition.x, mousePosition.y] != WALL):
 
                         if player.start is not None:
-                            _map.removeAllRef(player)
+                            _map.removeAllRef(players[activePlayer])
                             cid = _map.convertMapv2ClusterId(mousePosition)
                             players[activePlayer].updateStart(mousePosition, cid)
                             _map.addAndConnectNodeToGraph(players[activePlayer].start)
-                            _map.addAndConnectNodeToGraph(players[activePlayer].goal)
-                            if player.goal is not None:
-                                player.path = _map.calculatePathInGraph(player.start, player.goal, player.id)
-                                if player.path is None:
-                                    print "ERROR ERROR ERROR"
-                                    # _map.addAndConnectNodeToGraph(players[activePlayer].start)
-                                    # _map.addAndConnectNodeToGraph(players[activePlayer].goal)
-                                    # player.path = _map.calculatePathInGraph(player.start, player.goal, player.id)
+                            
+                            if players[activePlayer].goal is not None:
+                                goalId = _map.convertMapv2ClusterId(players[activePlayer].goal.position)
+                                players[activePlayer].updateGoal(players[activePlayer].goal.position, goalId)
+
+                                _map.addAndConnectNodeToGraph(players[activePlayer].goal)
+                                player.path = _map.calculatePathInGraph(players[activePlayer].start, players[activePlayer].goal, players[activePlayer].id)
 
                 if _inputHandler.getMousePressed(RIGHT_MOUSE_BUTTON):
                     mousePosition = _inputHandler.getMousePosition(_map)
                     if (_map.isPositionValid(mousePosition) and
                                                        _map[mousePosition.x, mousePosition.y] != WALL):
-                        player = players[activePlayer]
+
                         # Delete old goal
-                        _map.removeAllRef(player)
+                        _map.removeAllRef(players[activePlayer])
 
                         # Add new goal
                         cid = _map.convertMapv2ClusterId(mousePosition)
-                        player.updateGoal(mousePosition, cid)
-
+                        players[activePlayer].updateGoal(mousePosition, cid)
+                        players[activePlayer].updateStart(players[activePlayer].position)
                         _map.addAndConnectNodeToGraph(players[activePlayer].goal)
                         _map.addAndConnectNodeToGraph(players[activePlayer].start)
 
-                        player.path = _map.calculatePathInGraph(player.start, player.goal, player.id)
+                        players[activePlayer].path = _map.calculatePathInGraph(players[activePlayer].start,
+                                                                players[activePlayer].goal,
+                                                                players[activePlayer].id)
                         # if player.path == None:
                             # _map.addAndConnectNodeToGraph(players[activePlayer].start)
                             # _map.addAndConnectNodeToGraph(players[activePlayer].goal)
