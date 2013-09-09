@@ -79,8 +79,30 @@ class Map:
         else:
             return False
 
+    def removeInGraph(self, player, pos):
+        for node in self.graph.nodes:
+            if node.position == pos and player.goal != None and player.start.position != player.goal.position:
+                t1 = False
+                t2 = False
+                for id in node.affectedPlayers:
+                    if id == player.id:
+                        # This should be removed
+                        t2 = True
+                    else:
+                        t = True
+                if t1 and not t2:
+                    node.affectedPlayers.remove(player.id)
+                elif not t1 and t2:
+                    # Remove all edges with node
+                    edgesToRemove = []
+                    for edge in self.graph.edges:
+                        if edge.i1 == node or edge.i2 == node:
+                            edgesToRemove.append(edge)
+                    for edge in edgesToRemove:
+                        self.graph.edges.remove(edge)
+                    self.graph.nodes.remove(node)
+
     def calculatePathInGraph(self, start, goal, playerId):
-        print "Enter"
         starSolver = GraphAStar(self)
         path = starSolver.solveBetweenNodes([ALL_CLUSTERS], start, goal)
         return path

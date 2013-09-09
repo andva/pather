@@ -55,8 +55,6 @@ class AStar:
     def getReturn(self, node):
         if isinstance(node, int):
             return -1
-        print "Regular"
-        traceback.print_stack()
         return node.length
 
     def setVisited(self, position):
@@ -130,7 +128,6 @@ class GraphAStar(AStar):
             i1 = len(nodes) - 1 - i
             i2 = len(nodes) - 2 - i
             self.iterativeGetReturn(nodes[i2], nodes[i1], path)
-        traceback.print_stack()
         return path
 
     def iterateAddNode(self, node, nodes):
