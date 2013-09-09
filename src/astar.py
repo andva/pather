@@ -23,17 +23,12 @@ class AStar:
     def solveBetweenNodes(self, clusterIds, nodeA, goal):
         check = False
         # Make sure that nodes belongs to same player
-        nas = "nId: "
-        ngs = "gId: "
-        for gId in goal.affectedPlayers:
-            ngs += " " + str(gId)
 
         for sId in nodeA.affectedPlayers:
-            nas += " " + str(sId)
             for gId in goal.affectedPlayers:
                 if gId is ALL_PLAYERS or sId is ALL_PLAYERS or sId is gId:
                     check = True
-        print nas + " " + ngs + " " + str(check)
+
         if check:
             self.visitedPositions = []
             cost = self.calculateHeuristic(nodeA, goal, None)
@@ -116,14 +111,12 @@ class GraphAStar(AStar):
     def getReturn(self, currentNode):
         if isinstance(currentNode, int):
             return None
-        print "returning"
+
         nodes = []
         self.iterateAddNode(currentNode, nodes)
         if len(nodes) == 0:
             return None
         path = Path()
-        for n in nodes:
-            print str(n)
         for i in range(len(nodes) - 1):
             i1 = len(nodes) - 1 - i
             i2 = len(nodes) - 2 - i

@@ -45,5 +45,4 @@ class Player:
         if self.path is not None and self.position != self.goal.position:
             self.position = self.path.popNextPosition()
         else:
-            self.path.array = None
             self.path = None

@@ -79,9 +79,32 @@ class Map:
         else:
             return False
 
+    def removeAllRef(self, player):
+        nodesToRemove = []
+
+        for node in self.graph.nodes:
+            for id in node.affectedPlayers:
+                if id == player.id and len(node.affectedPlayers) == 1:
+                    nodesToRemove.append(node)
+                else:
+                    try:
+                        node.affectedPlayers.remove(player.id)
+                    except ValueError:
+                        pass
+
+        edgesToRemove = []
+        for edge in self.graph.edges:
+            if edge.i1 in nodesToRemove or edge.i2 in nodesToRemove:
+                edgesToRemove.append(edge)
+
+        for edge in edgesToRemove:
+            self.graph.edges.remove(edge)
+        for node in nodesToRemove:
+            self.graph.nodes.remove(node)
+
     def removeInGraph(self, player, pos):
         for node in self.graph.nodes:
-            if node.position == pos and player.goal == None or  player.start.position != player.goal.positions:
+            if node.position == pos and (player.goal == None or (player.goal != None and player.start.position != player.goal.position) ):
                 t1 = False
                 t2 = False
                 for id in node.affectedPlayers:

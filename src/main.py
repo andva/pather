@@ -41,19 +41,36 @@ def main():
                 drawGraph = not drawGraph
 
             if _inputHandler.getKeyPressed(K_r):
-                for player in players:
+                edgesToRemove = []
+                nodesToRemove = []
+                for node in _map.graph.nodes:
                     # Cheat to remove all nodes.
-                    if player.goal != None:
-                        _map.removeInGraph(player, player.goal.position)
-                    _map.removeInGraph(player, player.start.position)
-
+                    tester = False
+                    for id in node.affectedPlayers:
+                        if id == ALL_PLAYERS:
+                            tester = True
+                    if not tester:
+                        for edge in _map.graph.edges:
+                            if edge.i1 == node or edge.i2 == node:
+                                edgesToRemove.append(edge)
+                                nodesToRemove.append(node)
+                for edge in edgesToRemove:
+                    try:
+                        _map.graph.edges.remove(edge)
+                    except ValueError:
+                        pass
+                for node in nodesToRemove:
+                    try:
+                        _map.graph.nodes.remove(node)
+                    except ValueError:
+                        pass
                 players = []
                 activePlayer = -1
 
             if _inputHandler.getKeyPressed(K_t):
                 if activePlayer >= 0:
                     player = players[activePlayer]
-                    if player != None:
+                    if player.goal != None:
                         _map.removeInGraph(player, player.goal.position)
                     _map.removeInGraph(player, player.start.position)
 
@@ -71,6 +88,7 @@ def main():
                     activePlayer = playerId
                     player = Player(mousePosition, cid, playerId)
                     players.append(player)
+
                     _map.addAndConnectNodeToGraph(player.start)
 
                     print("Added player" + str(playerId))
@@ -89,14 +107,18 @@ def main():
                                                        _map[mousePosition.x, mousePosition.y] != WALL):
 
                         if player.start is not None:
-                            _map.removeInGraph(player, player.start.position)
-
+                            _map.removeAllRef(player)
                             cid = _map.convertMapv2ClusterId(mousePosition)
                             players[activePlayer].updateStart(mousePosition, cid)
                             _map.addAndConnectNodeToGraph(players[activePlayer].start)
+                            _map.addAndConnectNodeToGraph(players[activePlayer].goal)
                             if player.goal is not None:
                                 player.path = _map.calculatePathInGraph(player.start, player.goal, player.id)
-                                print "a " + str(player.path)
+                                if player.path is None:
+                                    print "ERROR ERROR ERROR"
+                                    # _map.addAndConnectNodeToGraph(players[activePlayer].start)
+                                    # _map.addAndConnectNodeToGraph(players[activePlayer].goal)
+                                    # player.path = _map.calculatePathInGraph(player.start, player.goal, player.id)
 
                 if _inputHandler.getMousePressed(RIGHT_MOUSE_BUTTON):
                     mousePosition = _inputHandler.getMousePosition(_map)
@@ -104,17 +126,20 @@ def main():
                                                        _map[mousePosition.x, mousePosition.y] != WALL):
                         player = players[activePlayer]
                         # Delete old goal
-                        if player.goal is not None:
-                            _map.removeInGraph(player, player.goal.position)
+                        _map.removeAllRef(player)
 
                         # Add new goal
                         cid = _map.convertMapv2ClusterId(mousePosition)
                         player.updateGoal(mousePosition, cid)
+
                         _map.addAndConnectNodeToGraph(players[activePlayer].goal)
+                        _map.addAndConnectNodeToGraph(players[activePlayer].start)
 
                         player.path = _map.calculatePathInGraph(player.start, player.goal, player.id)
-                        if player.path == None:
-                            player.path = _map.calculatePathInGraph(player.start, player.goal, player.id)
+                        # if player.path == None:
+                            # _map.addAndConnectNodeToGraph(players[activePlayer].start)
+                            # _map.addAndConnectNodeToGraph(players[activePlayer].goal)
+                            # player.path = _map.calculatePathInGraph(player.start, player.goal, player.id)
 
                 if _inputHandler.getKeyPressed(K_s):
                     for player in players:
