@@ -1,0 +1,64 @@
+\documentclass[11 pt]{article} %Sets the default text size to 11pt and class to article.
+%------------------------Dimensions--------------------------------------------
+\topmargin=0.0in %length of margin at the top of the page (1 inch added by default)
+\oddsidemargin=0.0in %length of margin on sides for odd pages
+\evensidemargin=0in %length of margin on sides for even pages
+\textwidth=6.5in %How wide you want your text to be
+\marginparwidth=0.5in
+\headheight=0pt %1in margins at top and bottom (1 inch is added to this value by default)
+\headsep=0pt %Increase to increase white space in between headers and the top of the page
+\textheight=9.0in %How tall the text body is allowed to be on each page
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+%Font
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{tgpagella}
+\usepackage{lmodern}
+\usepackage{fancyvrb}
+\usepackage{color}
+\usepackage{lipsum}
+\usepackage{wrapfig}
+\usepackage[utf8]{inputenc}
+\usepackage{array, xcolor}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead{}
+\input{code/colorize}
+\usepackage[hidelinks]{hyperref}
+\usepackage{framed}
+
+\definecolor{dark-red}{rgb}{0.4,0.15,0.15}
+\definecolor{dark-blue}{rgb}{0.15,0.15,0.4}
+\definecolor{medium-blue}{rgb}{0,0,0.5}
+\hypersetup{
+    colorlinks, linkcolor={dark-red},
+    citecolor={dark-blue}, urlcolor={medium-blue}
+}
+
+
+\begin{document}
+\title{\vskip -5em \bf Near optimal A* path finding}   % type title between braces
+\author{
+	Andreas Valter, andva287@student.liu.se
+}
+\date{\today}    % type date between braces
+\maketitle
+\section{Introduction}
+Path finding is the extraction of the shortest route between two points and is mostly a core feature that is needed to control agents in the game. 
+With path finding, the user doesn't have to control all elements in the game. 
+Something that could be boring while playing against an AI or when there is a lot of agents that the user controls at the same time.\\
+
+When developing computer games, each clock cycle is important. This puts a goal for each component in the game engine to be as fast as possible. 
+Because when saving computation time on components, it is possible to increase the frame rate or adding more features. 
+
+Most computer games uses path finding to increase the game quality. For AI agents it makes it possible to go between locations. For the user, it could make it easier to travel between places. The most common method of choice is A* to find the shortest path between two points in a map. The problem with using A* is that it is quite slow, depending on how the map is defined, and a lot of computation is unused in the end.
+
+\section{Path finding}
+\subsection{A*}
+A* is basically 
+\subsection{Near optimal A*}
+\end{document}
+
