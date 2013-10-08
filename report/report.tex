@@ -54,11 +54,18 @@ Something that could be boring while playing against an AI or when there is a lo
 When developing computer games, each clock cycle is important. This puts a goal for each component in the game engine to be as fast as possible. 
 Because when saving computation time on components, it is possible to increase the frame rate or adding more features. 
 
-Most computer games uses path finding to increase the game quality. For AI agents it makes it possible to go between locations. For the user, it could make it easier to travel between places. The most common method of choice is A* to find the shortest path between two points in a map. The problem with using A* is that it is quite slow, depending on how the map is defined, and a lot of computation is unused in the end.
+Most computer games uses path finding to increase the game quality. For AI agents it makes it possible to go between locations. 
+For the user, it could make it easier to travel between places. 
+The most common method of choice is A* to find the shortest path between two points in a map. 
+The problem with using A* is that it is quite slow, depending on how the map is defined, and a lot of computation is unused in the end.
 
 \section{Path finding}
 \subsection{A*}
-A* is basically 
+A* is basically a modified Dijkstra algorithm, that is a graph search to find the optimal path between two nodes. 
+The search is done using heuristics to find probable next nodes that brings the search closer to the goal. 
+For map search, the heuristics is usually the Manhattan distance from the current position to the goal position.
+
 \subsection{Near optimal A*}
+
 \end{document}
 
